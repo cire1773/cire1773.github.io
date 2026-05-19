@@ -424,12 +424,16 @@ a:hover {
     /* CV Container & Frame */
     #cv-container {
         width: 95%;
-        height: 75vh;
-        margin-top: -30px;
+        /* Use calc to subtract the height of the bottom nav (60px) and top padding/controls to prevent overlap */
+        height: calc(100vh - 120px); 
+        margin-top: 0;
+        margin-bottom: 60px; /* Offset to clear the bottom nav */
     }
     .frame {
         padding: 20px 15px;
         overflow-y: auto;
+        /* Ensure scrolling doesn't cut off at the bottom. */
+        padding-bottom: 40px; 
     }
     
     /* Move Nav Controls into flow */
@@ -443,6 +447,10 @@ a:hover {
     }
 
     /* Adjust Font Sizes & Elements */
+    .frame.center-content {
+        justify-content: flex-start; /* allow natural scrolling instead of pinning center */
+        align-items: center; 
+    }
     .profile-photo {
         width: 100px;
         height: 100px;
