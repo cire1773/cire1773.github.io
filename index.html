@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodan Eric-Alexandru CV</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <div id="controls">
+        <button id="theme-toggle" title="Toggle Theme">🌓</button>
+        <button id="lang-toggle" title="Toggle Language">EN / RO</button>
+    </div>
+
+    <div id="animation-container"></div>
+
+    <nav id="sidebar">
+        <button class="side-nav-btn" data-target="frame-1">
+            <span class="icon">🏠</span><span class="text" data-key="nav_intro"></span>
+        </button>
+        <button class="side-nav-btn" data-target="frame-2">
+            <span class="icon">👤</span><span class="text" data-key="nav_about"></span>
+        </button>
+        <button class="side-nav-btn" data-target="frame-3">
+            <span class="icon">🎓</span><span class="text" data-key="nav_edu"></span>
+        </button>
+        <button class="side-nav-btn" data-target="frame-4">
+            <span class="icon">📜</span><span class="text" data-key="nav_exp"></span>
+        </button>
+        <button class="side-nav-btn" data-target="frame-5">
+            <span class="icon">💻</span><span class="text" data-key="nav_proj1"></span>
+        </button>
+        <button class="side-nav-btn" data-target="frame-6">
+            <span class="icon">🚀</span><span class="text" data-key="nav_proj2"></span>
+        </button>
+    </nav>
+
+    <main id="cv-container">
+        <!-- Frame 1: Intro -->
+        <section class="frame active center-content" id="frame-1">
+            <div class="profile-photo"></div>
+            <h1 data-key="header_name"></h1>
+            <p class="quote" data-key="quote_text"></p>
+            <div class="nav-controls intro-controls">
+                <button class="nav-btn next-btn" data-target="frame-2" data-key="start_btn"></button>
+                <a href="cv.pdf" target="_blank" class="nav-btn download-btn" data-key="download_btn"></a>
+            </div>
+        </section>
+
+        <!-- Frame 2: About & Contact -->
+        <section class="frame" id="frame-2">
+            <h2 data-key="frame_about_title" class="animate-item"></h2>
+            <p data-key="about_text" class="animate-item"></p>
+            <ul class="contact-list animate-item">
+                <li data-key="contact_email"></li>
+                <li data-key="contact_linkedin"></li>
+                <li data-key="contact_github"></li>
+            </ul>
+            <div class="nav-controls">
+                <button class="nav-btn back-btn" data-target="frame-1" data-key="nav_back"></button>
+                <button class="nav-btn next-btn" data-target="frame-3" data-key="nav_next"></button>
+            </div>
+        </section>
+
+        <!-- Frame 3: Education & Skills -->
+        <section class="frame" id="frame-3">
+            <div class="column animate-item">
+                <h2 data-key="frame_edu_title"></h2>
+                <ul>
+                    <li data-key="edu_uni"></li>
+                    <li data-key="edu_hs"></li>
+                </ul>
+            </div>
+            <div class="column animate-item" style="margin-top: 15px;">
+                <h2 data-key="frame_skills_title"></h2>
+                <ul>
+                    <li data-key="skills_lang"></li>
+                    <li data-key="skills_tools"></li>
+                    <li data-key="skills_net"></li>
+                    <li data-key="skills_spoken"></li>
+                </ul>
+            </div>
+            <div class="nav-controls">
+                <button class="nav-btn back-btn" data-target="frame-2" data-key="nav_back"></button>
+                <button class="nav-btn next-btn" data-target="frame-4" data-key="nav_next"></button>
+            </div>
+        </section>
+
+        <!-- Frame 4: Experience & Courses -->
+        <section class="frame" id="frame-4">
+            <div class="column animate-item">
+                <h2 data-key="frame_exp_title"></h2>
+                <ul>
+                    <li data-key="exp_rust"></li>
+                    <li data-key="exp_kube"></li>
+                    <li data-key="exp_iot"></li>
+                    <li data-key="exp_ccna"></li>
+                    <li data-key="exp_web"></li>
+                </ul>
+            </div>
+            <div class="nav-controls">
+                <button class="nav-btn back-btn" data-target="frame-3" data-key="nav_back"></button>
+                <button class="nav-btn next-btn" data-target="frame-5" data-key="nav_next"></button>
+            </div>
+        </section>
+
+        <!-- Frame 5: Projects Part 1 -->
+        <section class="frame" id="frame-5">
+            <div class="column animate-item">
+                <h2 data-key="frame_proj_title"></h2>
+                <ul>
+                    <li data-key="proj_sound"></li>
+                    <li data-key="proj_show"></li>
+                    <li data-key="proj_mail"></li>
+                </ul>
+            </div>
+            <div class="nav-controls">
+                <button class="nav-btn back-btn" data-target="frame-4" data-key="nav_back"></button>
+                <button class="nav-btn next-btn" data-target="frame-6" data-key="nav_next"></button>
+            </div>
+        </section>
+
+        <!-- Frame 6: Projects Part 2 -->
+        <section class="frame" id="frame-6">
+            <div class="column animate-item">
+                <h2 data-key="frame_proj_title"></h2>
+                <ul>
+                    <li data-key="proj_doorbell"></li>
+                    <li data-key="proj_sudoku"></li>
+                    <li data-key="proj_games"></li>
+                </ul>
+            </div>
+            <div class="nav-controls">
+                <button class="nav-btn back-btn" data-target="frame-5" data-key="nav_back"></button>
+            </div>
+        </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
