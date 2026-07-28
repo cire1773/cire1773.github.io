@@ -1,142 +1,901 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prodan Eric-Alexandru CV</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0e14">
+<title>Prodan Eric-Alexandru — Computer Engineering</title>
+<meta name="description" content="Portfolio of Prodan Eric-Alexandru, Computer Engineering student passionate about low-level systems, C/C++, Rust, Assembly and Linux.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230d0b13'/%3E%3Ctext x='50' y='67' font-size='52' text-anchor='middle' fill='%23c4b5fd' font-family='monospace'%3EE%3C/text%3E%3C/svg%3E">
+<script>
+(function(){
+  var t = localStorage.getItem('theme');
+  if(!t){ t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg: #f6f7f9; --bg-soft: #ffffff; --surface: #ffffff; --border: #e3e6ec;
+  --text: #14171c; --text-dim: #5c6270; --accent: #7c3aed; --accent-2: #b45309;
+  --accent-soft: rgba(124,58,237,.10); --nav-bg: rgba(255,255,255,.82);
+  --shadow: 0 1px 3px rgba(20,23,28,.06), 0 8px 24px rgba(20,23,28,.05);
+  --radius: 14px; --mono: 'JetBrains Mono', monospace; --sans: 'Inter', sans-serif;
+  --display: 'Space Grotesk', sans-serif;
+}
+[data-theme="dark"] {
+  --bg: #0d0b13; --bg-soft: #110e18; --surface: #15121d; --border: #251f30;
+  --text: #e9e6f0; --text-dim: #948fa3; --accent: #c4b5fd; --accent-2: #fbbf24;
+  --accent-soft: rgba(196,181,253,.10); --nav-bg: rgba(13,11,19,.75);
+  --shadow: 0 1px 3px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.35);
+}
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  font-family: var(--sans); background: var(--bg); color: var(--text);
+  line-height: 1.65; -webkit-font-smoothing: antialiased;
+  transition: background .3s ease, color .3s ease; overflow-x: hidden;
+}
+img, svg { display:block; max-width:100%; }
+a { color: inherit; text-decoration:none; }
+ul { list-style:none; }
+button { font: inherit; background:none; border:none; cursor:pointer; color:inherit; }
+.container { width:min(1100px, 92%); margin-inline:auto; }
+::selection { background: var(--accent); color: var(--bg); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+h1,h2,h3 { font-family: var(--display); font-weight:600; line-height:1.15; letter-spacing:-.01em; }
+.mono { font-family: var(--mono); }
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}
+
+.navbar {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  background: var(--nav-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent; transition: border-color .3s ease, background .3s ease;
+}
+.navbar.scrolled { border-bottom-color: var(--border); }
+.nav-inner { width:min(1200px,92%); margin-inline:auto; display:flex; align-items:center; justify-content:space-between; height:72px; }
+.logo { display:flex; align-items:center; gap:.5rem; font-family:var(--display); font-weight:700; font-size:1.05rem; }
+.logo-mark { font-family:var(--mono); color:var(--accent); }
+.nav-links { display:flex; gap:2rem; }
+.nav-links a { font-size:.92rem; color:var(--text-dim); position:relative; padding:.3rem 0; transition:color .2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
+.nav-links a.active::after { content:''; position:absolute; left:0; right:0; bottom:-4px; height:2px; background:var(--accent); border-radius:2px; }
+.nav-controls { display:flex; align-items:center; gap:.75rem; }
+.directive-toggle {
+  height:36px; padding:0 .7rem; border:1px solid var(--border); border-radius:8px;
+  display:flex; align-items:center; gap:.4rem; font-size:.74rem;
+  color:var(--text-dim); cursor:pointer; transition: all .2s ease; user-select:none;
+}
+.directive-toggle:hover { border-color: var(--accent); background: var(--accent-soft); }
+.directive-toggle .d-kw { color: var(--accent-2); }
+.directive-toggle .d-name { color: var(--text-dim); }
+.directive-toggle .d-val { color: var(--accent); font-weight:700; min-width: 2.2ch; text-align:left; }
+.nav-toggle { display:none; flex-direction:column; gap:4px; width:22px; }
+.nav-toggle span { height:2px; background:var(--text); border-radius:2px; transition:.25s; }
+.nav-toggle.active span:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+.nav-toggle.active span:nth-child(2){ opacity:0; }
+.nav-toggle.active span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
+@media (max-width: 820px) {
+  .nav-links { position:fixed; top:72px; left:0; right:0; background:var(--bg); flex-direction:column; padding:1.5rem; gap:1.25rem; border-bottom:1px solid var(--border); transform:translateY(-140%); transition:transform .3s ease; }
+  .nav-links.open { transform:translateY(0); }
+  .nav-toggle { display:flex; }
+}
+@media (max-width: 480px) {
+  .logo { font-size:.92rem; }
+  .nav-controls { gap:.4rem; }
+  .directive-toggle { font-size:.66rem; padding:0 .5rem; gap:.3rem; }
+  .directive-toggle .d-kw { display:none; }
+}
+
+.hero { position:relative; min-height:100vh; display:flex; align-items:center; padding-top:72px; overflow:hidden; }
+.hero-bg {
+  position:absolute; inset:0; z-index:-1;
+  background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black 20%, transparent 75%);
+  opacity:.6;
+}
+.hero-bg::after {
+  content:''; position:absolute; top:8%; right:8%; width:420px; height:420px; border-radius:50%;
+  background: var(--accent); opacity:.12; filter: blur(90px); animation: float 9s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-30px);} }
+.hero-inner { max-width: 760px; }
+.hero-eyebrow { color: var(--accent); font-size:.95rem; margin-bottom:.75rem; letter-spacing:.02em; }
+.hero-name { font-size: clamp(2.1rem, 6vw, 3.6rem); margin-bottom:.5rem; }
+.hero-role { font-size:1.15rem; color:var(--text-dim); margin-bottom:1.5rem; }
+.hero-quote {
+  font-size:.98rem; color:var(--text); background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:.9rem 1.1rem; display:inline-block; margin-bottom:1.5rem; min-height:3rem;
+}
+.hero-quote .prompt { color:var(--accent); margin-right:.5rem; }
+.cursor { display:inline-block; margin-left:2px; color:var(--accent); animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity:0; } }
+.hero-chips { display:flex; flex-wrap:wrap; gap:.6rem; margin-bottom:2rem; }
+.hero-chip {
+  font-family:var(--mono); font-size:.78rem; padding:.4rem .8rem; border:1px solid var(--border);
+  border-radius:999px; color:var(--text-dim); background:var(--surface);
+}
+.hero-chip.live { color:var(--accent); border-color:var(--accent); background:var(--accent-soft); display:inline-flex; align-items:center; }
+.chip-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); display:inline-block; margin-right:.45rem; animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.25; } }
+.hero-cta { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:2rem; }
+.btn { padding:.85rem 1.6rem; border-radius:10px; font-weight:600; font-size:.92rem; transition: all .2s ease; display:inline-flex; align-items:center; gap:.5rem; }
+.btn-primary { background:var(--accent); color: var(--bg); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -8px var(--accent); }
+.btn-outline { border:1px solid var(--border); color:var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.hero-social { display:flex; gap:1rem; }
+.hero-social a { width:40px; height:40px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; transition: all .2s ease; }
+.hero-social a:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-3px); }
+.hero-social svg { width:18px; height:18px; }
+.scroll-indicator { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); color:var(--text-dim); animation: bob 2s ease-in-out infinite; }
+.scroll-indicator svg { width:22px; height:22px; }
+@keyframes bob { 0%,100%{transform:translate(-50%,0);} 50%{transform:translate(-50%,8px);} }
+
+.section { padding: 7rem 0; }
+.section.alt { background: var(--bg-soft); }
+.section-title { display:flex; align-items:baseline; gap:.75rem; font-size:clamp(1.5rem,3.5vw,2.1rem); margin-bottom:3rem; }
+.section-title .idx { color:var(--accent); font-size:1rem; }
+.reveal { opacity:0; transform:translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.in-view { opacity:1; transform:translateY(0); }
+.about-grid { display:grid; grid-template-columns: 1.4fr 1fr; gap:3rem; align-items:start; }
+.about-copy { display:flex; flex-direction:column; gap:1rem; }
+.about-text { color:var(--text-dim); font-size:1.02rem; }
+.about-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.75rem; }
+.about-fact { display:flex; justify-content:space-between; gap:1rem; padding:.6rem 0; border-bottom:1px solid var(--border); font-size:.92rem; }
+.about-fact:last-of-type { border-bottom:none; }
+.fact-label { color:var(--text-dim); font-size:.8rem; }
+.about-tags { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.25rem; }
+.tag { font-family:var(--mono); font-size:.75rem; padding:.3rem .6rem; border:1px solid var(--border); border-radius:6px; color:var(--accent); }
+@media (max-width:800px) { .about-grid { grid-template-columns:1fr; } }
+.edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
+.col-heading { font-size:1rem; text-transform:uppercase; letter-spacing:.08em; color:var(--text-dim); margin-bottom:1.5rem; }
+.edu-item { display:flex; gap:1rem; margin-bottom:1.75rem; }
+.edu-marker { width:10px; height:10px; border-radius:50%; background:var(--accent); margin-top:.4rem; flex-shrink:0; }
+.edu-degree { font-weight:600; margin-bottom:.2rem; }
+.edu-place { color:var(--text-dim); font-size:.9rem; margin-bottom:.5rem; }
+.badge { display:inline-block; font-family:var(--mono); font-size:.72rem; padding:.25rem .55rem; border-radius:6px; background:var(--accent-soft); color:var(--accent); }
+.skills-sub { color:var(--text-dim); font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; margin: 1.25rem 0 .75rem; }
+.skills-sub:first-of-type { margin-top:0; }
+.skill-badges { display:flex; flex-wrap:wrap; gap:.6rem; }
+.badge-skill { font-family:var(--mono); font-size:.82rem; padding:.5rem .85rem; border-radius:8px; border:1px solid var(--border); }
+.badge-skill.core { border-color:var(--accent); color:var(--accent); background:var(--accent-soft); font-weight:600; }
+.skills-meta { margin-top:2rem; display:grid; gap:1rem; }
+.skills-meta > div span { display:block; font-size:.75rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.25rem; }
+.skills-meta > div p { font-size:.9rem; }
+@media (max-width:800px) { .edu-grid { grid-template-columns:1fr; } }
+.timeline { position:relative; max-width:800px; margin-inline:auto; }
+.timeline::before { content:''; position:absolute; left:80px; top:0; bottom:0; width:2px; background:var(--border); }
+.timeline-item { position:relative; display:grid; grid-template-columns:70px 1fr; column-gap:2rem; padding-bottom:2.5rem; }
+.timeline-item:last-child { padding-bottom:0; }
+.timeline-item::after {
+  content:''; position:absolute; left:75px; top:4px; width:10px; height:10px; border-radius:50%;
+  background:var(--bg); border:2px solid var(--accent);
+}
+.timeline-marker { text-align:right; font-size:.78rem; color:var(--accent); padding-top:0; }
+.timeline-content { padding-left:.35rem; }
+.timeline-content h3 { font-size:1.05rem; margin-bottom:.3rem; }
+.timeline-provider { color:var(--accent); font-size:.78rem; margin-bottom:.5rem; }
+.timeline-desc { color:var(--text-dim); font-size:.92rem; }
+@media (max-width:600px){
+  .timeline::before{ left:50px; }
+  .timeline-item{ grid-template-columns:50px 1fr; column-gap:1.25rem; }
+  .timeline-item::after{ left:45px; }
+}
+.projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; }
+.project-card { position:relative; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.75rem; transition: all .25s ease; }
+.project-card:hover { border-color:var(--accent); transform:translateY(-4px); box-shadow:var(--shadow); }
+.project-card h3 { font-size:1.1rem; margin-bottom:.6rem; }
+.project-card p { color:var(--text-dim); font-size:.9rem; margin-bottom:1rem; }
+.project-tags { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1rem; }
+.tag-mini { font-family:var(--mono); font-size:.7rem; padding:.2rem .5rem; border-radius:5px; background:var(--accent-soft); color:var(--accent); }
+.project-link { font-size:.85rem; color:var(--accent); font-weight:600; }
+.award-badge { position:absolute; top:-10px; right:1.25rem; background:var(--accent-2); color:var(--bg); font-family:var(--mono); font-size:.68rem; font-weight:700; padding:.3rem .6rem; border-radius:6px; }
+.wip-badge {
+  position:absolute; top:-10px; right:1.25rem; background:var(--accent); color:var(--bg);
+  font-family:var(--mono); font-size:.68rem; font-weight:700; padding:.3rem .6rem; border-radius:6px;
+  display:inline-flex; align-items:center;
+}
+.wip-dot { width:6px; height:6px; border-radius:50%; background:var(--bg); margin-right:.4rem; animation: pulse 1.4s ease-in-out infinite; }
+
+/* Achievements */
+.achievements-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.5rem; }
+.achievement-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.75rem; text-align:center; transition: all .25s ease; display:flex; flex-direction:column; align-items:center; }
+.achievement-card:hover { border-color:var(--accent); transform:translateY(-4px); }
+.achievement-value { font-family:var(--display); font-size:1.8rem; font-weight:700; color:var(--accent); margin-bottom:.5rem; }
+.achievement-label { color:var(--text-dim); font-size:.88rem; }
+
+/* ---- certificate link ---- */
+.cert-link {
+  display:inline-flex; align-items:center; gap:.4rem;
+  margin-top:.8rem; font-size:.78rem; font-weight:600;
+  color:var(--accent); border:1px solid var(--accent);
+  padding:.35rem .75rem; border-radius:6px;
+  transition: all .2s ease;
+}
+.cert-link:hover { background:var(--accent-soft); }
+.cert-link svg { width:14px; height:14px; }
+
+/* ---- experience card ---- */
+.achievement-card.experience {
+  grid-column: span 2;
+  text-align: left;
+  align-items: flex-start;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+}
+.achievement-card.experience .achievement-meta { display:flex; flex-direction:column; gap:.35rem; }
+.achievement-card.experience .achievement-value { font-size:1.5rem; margin-bottom:0; }
+.achievement-card.experience .achievement-label { font-size:.95rem; color:var(--text); font-weight:600; }
+.achievement-card.experience .achievement-desc {
+  color:var(--text-dim); font-size:.9rem; line-height:1.55; margin-top:.25rem;
+}
+.achievement-sites {
+  display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.6rem;
+}
+.site-link {
+  font-family:var(--mono); font-size:.74rem;
+  padding:.25rem .55rem; border-radius:5px;
+  background:var(--accent-soft); color:var(--accent);
+  border:1px solid var(--border); transition: all .2s ease;
+}
+.site-link:hover { border-color:var(--accent); }
+.site-link .ext { font-size:.6rem; opacity:.7; margin-left:.15rem; }
+
+@media (max-width: 700px) {
+  .achievement-card.experience {
+    grid-column: span 1;
+    grid-template-columns: 1fr;
+    text-align: center;
+    align-items: center;
+  }
+  .achievement-card.experience .achievement-sites { justify-content:center; }
+}
+
+.passions-lead { color:var(--text-dim); max-width:560px; margin:0 0 2.5rem; }
+.passions-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1.5rem; }
+.passion-card {
+  display:flex; flex-direction:column; align-items:center; gap:.9rem; text-align:center;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:1.75rem 1.25rem; transition: all .25s ease;
+}
+.passion-card:hover { border-color:var(--accent); transform:translateY(-4px); box-shadow:var(--shadow); }
+.passion-icon {
+  width:52px; height:52px; border-radius:50%; background:var(--accent-soft);
+  display:flex; align-items:center; justify-content:center; color:var(--accent);
+}
+.passion-icon svg { width:26px; height:26px; }
+.passion-title { font-weight:600; font-size:.95rem; }
+
+/* ---- passion theme overrides ---- */
+.passion-card.orange .passion-icon { background: rgba(232,112,44,0.12); color: #e8702c; }
+.passion-card.orange:hover { border-color: #e8702c; box-shadow: 0 12px 32px rgba(232,112,44,0.15); }
+.passion-card.orange .passion-title { color: #e8702c; }
+
+.passion-card.green .passion-icon { background: rgba(34,197,94,0.12); color: #22c55e; }
+.passion-card.green:hover { border-color: #22c55e; box-shadow: 0 12px 32px rgba(34,197,94,0.15); }
+.passion-card.green .passion-title { color: #22c55e; }
+
+/* Light mode adjustments */
+[data-theme="light"] .passion-card.orange .passion-icon { background: rgba(232,112,44,0.08); color: #c45a1e; }
+[data-theme="light"] .passion-card.orange:hover { border-color: #c45a1e; }
+[data-theme="light"] .passion-card.orange .passion-title { color: #c45a1e; }
+
+[data-theme="light"] .passion-card.green .passion-icon { background: rgba(22,163,74,0.08); color: #16a34a; }
+[data-theme="light"] .passion-card.green:hover { border-color: #16a34a; }
+[data-theme="light"] .passion-card.green .passion-title { color: #16a34a; }
+
+/* diploma link inside ping-pong card */
+.diploma-link {
+  margin-top: .6rem;
+  font-family: var(--mono); font-size: .72rem;
+  color: var(--accent); border: 1px solid var(--accent);
+  padding: .3rem .6rem; border-radius: 6px;
+  display: inline-flex; align-items: center; gap: .3rem;
+  transition: all .2s ease;
+}
+.diploma-link:hover { background: var(--accent-soft); }
+.diploma-link svg { width: 12px; height: 12px; }
+.contact-inner { text-align:center; }
+.contact-inner .section-title { justify-content:center; }
+.contact-sub { color:var(--text-dim); max-width:480px; margin:0 auto 2.5rem; }
+.contact-cards { display:flex; flex-wrap:wrap; justify-content:center; gap:1.25rem; }
+.contact-card { display:flex; flex-direction:column; align-items:center; gap:.6rem; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.75rem 2.25rem; min-width:200px; transition: all .25s ease; }
+.contact-card:hover { border-color:var(--accent); transform:translateY(-4px); }
+.contact-card svg { width:26px; height:26px; color:var(--accent); }
+.contact-card span:first-of-type { font-weight:600; }
+.contact-card span.mono { color:var(--text-dim); font-size:.8rem; }
+.footer { border-top:1px solid var(--border); padding:2rem 0; text-align:center; color:var(--text-dim); font-size:.82rem; }
+.to-top {
+  position:fixed; bottom:2rem; right:2rem; width:44px; height:44px; border-radius:50%;
+  background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transform:translateY(10px); transition: all .3s ease; z-index:150;
+}
+.to-top.show { opacity:1; pointer-events:auto; transform:translateY(0); }
+.to-top:hover { border-color:var(--accent); color:var(--accent); }
+.to-top svg { width:18px; height:18px; }
+</style>
 </head>
-<body class="dark-theme">
-    <div id="controls">
-        <button id="theme-toggle" title="Toggle Theme">🌓</button>
-        <button id="lang-toggle" title="Toggle Language">EN / RO</button>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="logo"><span class="logo-mark mono">&lt;/&gt;</span>&nbsp;Eric Prodan</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about" data-i18n="nav.about">About</a></li>
+      <li><a href="#education" data-i18n="nav.education">Education & Skills</a></li>
+      <li><a href="#training" data-i18n="nav.training">Training</a></li>
+      <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
+      <li><a href="#achievements" data-i18n="nav.achievements">Achievements</a></li>
+      <li><a href="#passions" data-i18n="nav.passions">Passions</a></li>
+      <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+    </ul>
+    <div class="nav-controls">
+      <button class="directive-toggle mono" id="langToggle" type="button" aria-label="Toggle language">
+        <span class="d-kw">#define</span><span class="d-name">LANG</span><span class="d-val" id="langVal">EN</span>
+      </button>
+      <button class="directive-toggle mono" id="themeToggle" type="button" aria-label="Toggle theme">
+        <span class="d-kw">#define</span><span class="d-name">THEME</span><span class="d-val" id="themeVal">DARK</span>
+      </button>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
+  </div>
+</nav>
 
-    <div id="animation-container"></div>
+<section id="home" class="hero">
+  <div class="hero-bg"></div>
+  <div class="container hero-inner">
+    <p class="hero-eyebrow mono" data-i18n="hero.eyebrow">Hi, I'm</p>
+    <h1 class="hero-name">Prodan Eric-Alexandru</h1>
+    <p class="hero-role" data-i18n="hero.role">Computer Engineering Student</p>
+    <p class="hero-quote mono"><span class="prompt">$</span><span id="typedQuote"></span><span class="cursor">▌</span></p>
+    <div class="hero-chips" id="heroChips"></div>
+    <div class="hero-cta">
+      <a href="#about" class="btn btn-primary" data-i18n="hero.cta1">Read My CV</a>
+      <a href="CV.pdf" download class="btn btn-outline" data-i18n="hero.cta2">Download PDF</a>
+    </div>
+    <div class="hero-social">
+      <a href="mailto:contact.ericprodan@gmail.com" aria-label="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+      </a>
+      <a href="https://github.com/cire1773" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.71 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.18 1.83 1.18 3.09 0 4.44-2.68 5.42-5.24 5.7.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/prodan-eric-814aa4322/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+      </a>
+    </div>
+  </div>
+  <a href="#about" class="scroll-indicator" aria-label="Scroll down">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </a>
+</section>
 
-    <nav id="sidebar">
-        <button class="side-nav-btn" data-target="frame-1">
-            <span class="icon">🏠</span><span class="text" data-key="nav_intro"></span>
-        </button>
-        <button class="side-nav-btn" data-target="frame-2">
-            <span class="icon">👤</span><span class="text" data-key="nav_about"></span>
-        </button>
-        <button class="side-nav-btn" data-target="frame-3">
-            <span class="icon">🎓</span><span class="text" data-key="nav_edu"></span>
-        </button>
-        <button class="side-nav-btn" data-target="frame-4">
-            <span class="icon">📜</span><span class="text" data-key="nav_exp"></span>
-        </button>
-        <button class="side-nav-btn" data-target="frame-5">
-            <span class="icon">💻</span><span class="text" data-key="nav_proj1"></span>
-        </button>
-        <button class="side-nav-btn" data-target="frame-6">
-            <span class="icon">🚀</span><span class="text" data-key="nav_proj2"></span>
-        </button>
-    </nav>
+<section id="about" class="section">
+  <div class="container">
+    <h2 class="section-title"><span class="idx mono">01</span><span data-i18n="about.title">About Me</span></h2>
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p class="about-text" data-i18n="about.text">...</p>
+        <p class="about-text" data-i18n="about.text2">...</p>
+      </div>
+      <div class="about-card reveal">
+        <div class="about-fact"><span class="fact-label mono" data-i18n="about.factRoleLabel">Role</span><span class="fact-value" data-i18n="about.factRole">...</span></div>
+        <div class="about-fact"><span class="fact-label mono" data-i18n="about.factUniLabel">University</span><span class="fact-value" data-i18n="about.factUni">...</span></div>
+        <div class="about-fact"><span class="fact-label mono" data-i18n="about.factFocusLabel">Focus</span><span class="fact-value" data-i18n="about.factFocus">...</span></div>
+        <div class="about-tags">
+          <span class="tag">C</span><span class="tag">C++</span><span class="tag">Rust</span><span class="tag">Assembly</span><span class="tag">Linux</span><span class="tag">HTML/CSS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <main id="cv-container">
-        <!-- Frame 1: Intro -->
-        <section class="frame active center-content" id="frame-1">
-            <div class="profile-photo"></div>
-            <h1 data-key="header_name"></h1>
-            <p class="quote" data-key="quote_text"></p>
-            <div class="nav-controls intro-controls">
-                <button class="nav-btn next-btn" data-target="frame-2" data-key="start_btn"></button>
-                <a href="CV.pdf" target="_blank" class="nav-btn download-btn" data-key="download_btn"></a>
-            </div>
-        </section>
+<section id="education" class="section alt">
+  <div class="container">
+    <h2 class="section-title"><span class="idx mono">02</span><span data-i18n="education.title">Education & Skills</span></h2>
+    <div class="edu-grid">
+      <div class="edu-col reveal">
+        <h3 class="col-heading" data-i18n="education.eduHeading">Education</h3>
+        <div class="edu-item">
+          <span class="edu-marker"></span>
+          <div>
+            <p class="edu-degree" data-i18n="education.uniDegree">BSc in Computer Engineering</p>
+            <p class="edu-place" data-i18n="education.uniPlace">Faculty of Automatic Control and Computers, UPB</p>
+            <span class="badge" data-i18n="education.uniStatus">1st Year — Currently Enrolled</span>
+          </div>
+        </div>
+        <div class="edu-item">
+          <span class="edu-marker"></span>
+          <div>
+            <p class="edu-degree" data-i18n="education.hsDegree">High School Diploma</p>
+            <p class="edu-place">Colegiul Național "Matei Basarab"</p>
+            <span class="badge" data-i18n="education.hsStatus">Mathematics-Informatics, Intensive Informatics</span>
+          </div>
+        </div>
+      </div>
+      <div class="skills-col reveal">
+        <h3 class="col-heading" data-i18n="education.skillsHeading">Skills</h3>
+        <p class="skills-sub mono" data-i18n="education.corePassions">Core Passions</p>
+        <div class="skill-badges" id="coreSkills"></div>
+        <p class="skills-sub mono" data-i18n="education.alsoKnow">Also Proficient In</p>
+        <div class="skill-badges" id="otherSkills"></div>
+        <div class="skills-meta">
+          <div><span data-i18n="education.toolsLabel">Tools</span><p data-i18n="education.toolsValue">...</p></div>
+          <div><span data-i18n="education.netLabel">Networking</span><p data-i18n="education.netValue">...</p></div>
+          <div><span data-i18n="education.spokenLabel">Spoken</span><p data-i18n="education.spokenValue">...</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- Frame 2: About & Contact -->
-        <section class="frame" id="frame-2">
-            <h2 data-key="frame_about_title" class="animate-item"></h2>
-            <p data-key="about_text" class="animate-item"></p>
-            <ul class="contact-list animate-item">
-                <li data-key="contact_email"></li>
-                <li data-key="contact_linkedin"></li>
-                <li data-key="contact_github"></li>
-            </ul>
-            <div class="nav-controls">
-                <button class="nav-btn back-btn" data-target="frame-1" data-key="nav_back"></button>
-                <button class="nav-btn next-btn" data-target="frame-3" data-key="nav_next"></button>
-            </div>
-        </section>
+<section id="training" class="section">
+  <div class="container">
+    <h2 class="section-title"><span class="idx mono">03</span><span data-i18n="training.title">Training & Certifications</span></h2>
+    <div class="timeline reveal" id="trainingList"></div>
+  </div>
+</section>
 
-        <!-- Frame 3: Education & Skills -->
-        <section class="frame" id="frame-3">
-            <div class="column animate-item">
-                <h2 data-key="frame_edu_title"></h2>
-                <ul>
-                    <li data-key="edu_uni"></li>
-                    <li data-key="edu_hs"></li>
-                </ul>
-            </div>
-            <div class="column animate-item" style="margin-top: 15px;">
-                <h2 data-key="frame_skills_title"></h2>
-                <ul>
-                    <li data-key="skills_lang"></li>
-                    <li data-key="skills_tools"></li>
-                    <li data-key="skills_net"></li>
-                    <li data-key="skills_spoken"></li>
-                </ul>
-            </div>
-            <div class="nav-controls">
-                <button class="nav-btn back-btn" data-target="frame-2" data-key="nav_back"></button>
-                <button class="nav-btn next-btn" data-target="frame-4" data-key="nav_next"></button>
-            </div>
-        </section>
+<section id="projects" class="section alt">
+  <div class="container">
+    <h2 class="section-title"><span class="idx mono">04</span><span data-i18n="projects.title">Notable Projects</span></h2>
+    <div class="projects-grid reveal" id="projectsGrid"></div>
+  </div>
+</section>
 
-        <!-- Frame 4: Experience & Courses -->
-        <section class="frame" id="frame-4">
-            <div class="column animate-item">
-                <h2 data-key="frame_exp_title"></h2>
-                <ul>
-                    <li data-key="exp_rust"></li>
-                    <li data-key="exp_kube"></li>
-                    <li data-key="exp_iot"></li>
-                    <li data-key="exp_ccna"></li>
-                    <li data-key="exp_web"></li>
-                </ul>
-            </div>
-            <div class="nav-controls">
-                <button class="nav-btn back-btn" data-target="frame-3" data-key="nav_back"></button>
-                <button class="nav-btn next-btn" data-target="frame-5" data-key="nav_next"></button>
-            </div>
-        </section>
+<section id="achievements" class="section">
+  <div class="container">
+    <h2 class="section-title"><span class="idx mono">05</span><span data-i18n="achievements.title">Achievements</span></h2>
+    <div class="achievements-grid reveal" id="achievementsGrid"></div>
+  </div>
+</section>
 
-        <!-- Frame 5: Projects Part 1 -->
-        <section class="frame" id="frame-5">
-            <div class="column animate-item">
-                <h2 data-key="frame_proj_title"></h2>
-                <ul>
-                    <li data-key="proj_sound"></li>
-                    <li data-key="proj_show"></li>
-                    <li data-key="proj_mail"></li>
-                </ul>
-            </div>
-            <div class="nav-controls">
-                <button class="nav-btn back-btn" data-target="frame-4" data-key="nav_back"></button>
-                <button class="nav-btn next-btn" data-target="frame-6" data-key="nav_next"></button>
-            </div>
-        </section>
+<section id="passions" class="section alt">
+  <div class="container">
+    <h2 class="section-title"><span class="idx mono">06</span><span data-i18n="passions.title">Passions</span></h2>
+    <p class="passions-lead reveal" data-i18n="passions.lead">...</p>
+    <div class="passions-grid reveal" id="passionsGrid"></div>
+  </div>
+</section>
 
-        <!-- Frame 6: Projects Part 2 -->
-        <section class="frame" id="frame-6">
-            <div class="column animate-item">
-                <h2 data-key="frame_proj_title"></h2>
-                <ul>
-                    <li data-key="proj_doorbell"></li>
-                    <li data-key="proj_sudoku"></li>
-                    <li data-key="proj_games"></li>
-                </ul>
-            </div>
-            <div class="nav-controls">
-                <button class="nav-btn back-btn" data-target="frame-5" data-key="nav_back"></button>
-            </div>
-        </section>
-    </main>
+<section id="contact" class="section">
+  <div class="container contact-inner">
+    <h2 class="section-title"><span class="idx mono">07</span><span data-i18n="contact.title">Get In Touch</span></h2>
+    <p class="contact-sub" data-i18n="contact.subtitle">...</p>
+    <div class="contact-cards reveal">
+      <a class="contact-card" href="mailto:contact.ericprodan@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+        <span data-i18n="contact.emailLabel">Email</span>
+        <span class="mono">contact.ericprodan@gmail.com</span>
+      </a>
+      <a class="contact-card" href="https://github.com/cire1773" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.71 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.18 1.83 1.18 3.09 0 4.44-2.68 5.42-5.24 5.7.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+        <span data-i18n="contact.githubLabel">GitHub</span>
+        <span class="mono">github.com/cire1773</span>
+      </a>
+      <a class="contact-card" href="https://www.linkedin.com/in/prodan-eric-814aa4322/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        <span data-i18n="contact.linkedinLabel">LinkedIn</span>
+        <span class="mono">/in/prodan-eric</span>
+      </a>
+    </div>
+  </div>
+</section>
 
-    <script src="data.js"></script>
-    <script src="main.js"></script>
+<footer class="footer">
+  <div class="container">
+    <p class="mono" data-i18n="footer">© 2026 Prodan Eric-Alexandru</p>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+/* ============ DATA ============ */
+const skillsCore = ["C", "C++", "Rust", "Assembly", "Linux / Bash", "HTML5 & CSS3"];
+const skillsOther = ["Java", "Python", "Micro-Python", "JavaScript"];
+
+const i18n = {
+  en: {
+    nav: { about:"About", education:"Education & Skills", training:"Training", projects:"Projects", achievements:"Achievements", passions:"Passions", contact:"Contact" },
+    hero: {
+      eyebrow: "Hi, I'm",
+      role: "Computer Engineering Student",
+      quote: "Passionate about low-level systems, automation, and building the future.",
+      cta1: "Read My CV",
+      cta2: "Download PDF",
+      chips: [
+        { text: "Linux daily driver" },
+        { text: "Rust & modern C++" },
+        { text: "One Piece enthusiast" },
+        { text: "currently building SFS", live: true }
+      ]
+    },
+    about: {
+      title: "About Me",
+      text: "I am a Computer Engineering student at the Faculty of Automatic Control and Computers (Universitatea Politehnica din Bucuresti), with a strong focus on high-performance C programming and Artificial Intelligence. My primary interests lie in exploring the intersection of algorithmic efficiency and intelligent models to build practical, automated utilities. Always eager to expand my technical horizons, I combine my passion for computer science with a lifelong dedication to sports, which has taught me discipline and perseverance.",
+      text2: "Outside of coding, I split my free time between Rust/C++ side-projects, tinkering with my Linux setup, and keeping up with One Piece — currently my favorite anime by a wide margin.",
+      factRoleLabel: "Role", factRole: "Computer Engineering Student",
+      factUniLabel: "University", factUni: "UPB — Automatic Control & Computers",
+      factFocusLabel: "Focus", factFocus: "Systems Programming & AI"
+    },
+    education: {
+      title: "Education & Skills",
+      eduHeading: "Education",
+      uniDegree: "BSc in Computer Engineering",
+      uniPlace: "Faculty of Automatic Control and Computers, Universitatea Politehnica din Bucuresti",
+      uniStatus: "1st Year — Currently Enrolled",
+      hsDegree: "High School Diploma",
+      hsStatus: "Mathematics-Informatics, Intensive Informatics profile",
+      skillsHeading: "Skills",
+      corePassions: "Core Passions",
+      alsoKnow: "Also Proficient In",
+      toolsLabel: "Tools & Technologies", toolsValue: "Linux / Bash, Git / GitHub, GitHub Actions, Docker / Kubernetes, Slint UI, ECDL",
+      netLabel: "Networking", netValue: "Cisco CCNA 1, 2 & 3 Concepts",
+      spokenLabel: "Spoken Languages", spokenValue: "Romanian (Native), English (Fluent)"
+    },
+    training: {
+      title: "Training & Certifications",
+      items: [
+        { year:"2025", title:"Desktop Applications in Rust", provider:"IPWorkshop Summer School", desc:"Learned Rust programming and UI development with Slint." },
+        { year:"2024", title:"Kubernetes Track", provider:"IPWorkshop Summer School", desc:"Explored container orchestration and deployment strategies." },
+        { year:"2023", title:"IoT Track", provider:"IPWorkshop Summer School", desc:"Programmed a Raspberry Pi Pico H using Micro-Python." },
+        { year:"2022–2023", title:"CCNA 1, 2 & 3", provider:"Cisco Networking Academy — via Faculty of Automatic Control and Computers", desc:"Completed networking fundamentals coursework." },
+        { year:"2018–2019", title:"Web Design Course", provider:"StepITAcademy", desc:"Built foundational skills in web technologies (HTML/CSS)." }
+      ]
+    },
+    projects: {
+      title: "Notable Projects",
+      wipLabel: "Work in Progress",
+      linkLabel: "View on GitHub",
+      items: [
+        { title:"SFS", desc:"A venture I'm building to help students launch their own ideas. Starting with a flagship app under the SFS name to build traction, with the long-term goal of giving other student projects visibility and support.", tags:["Students for Students"], wip:true },
+        { title:"SoundProc", desc:"Engineered a specialized digital sound processing utility in C/C++ for precise audio manipulation and signal analysis.", tags:["C","C++","Signal Processing"], link:"https://github.com/cire1773/Sound-Processor" },
+        { title:"Show Tracker", desc:"Built a desktop application using Rust and Slint UI to manage and track favorite shows, featuring dynamic rating, watch progress, and status updates.", tags:["Rust","Slint UI"] },
+        { title:"Uni-Schedule-Mail", desc:"Developed an automated notification system using Python and GitHub Actions that parses Excel university schedules and delivers daily HTML email summaries.", tags:["Python","GitHub Actions"], link:"https://github.com/cire1773/Uni-Schedule-Mail" },
+        { title:"Smart Doorbell", desc:"Programmed an IoT hardware solution using a Raspberry Pi Pico H and Micro-Python, demonstrating practical integration of sensors and logic.", tags:["Micro-Python","IoT"] },
+        { title:"Sudoku Solver", desc:"Implemented a highly optimized, recursive solver in pure C, demonstrating strong expertise in memory management and algorithmic efficiency.", tags:["C","Algorithms"], link:"https://github.com/cire1773/Sudoku-Solver" },
+        { title:"Greenfoot Java Games", desc:"Designed a strategic Fish Tower Defense game and a time-limited action game for the Oracle Academy competition, achieving a near-maximum score.", tags:["Java","Greenfoot"], award:"Awarded Sept 2023" }
+      ]
+    },
+    achievements: {
+      title: "Achievements",
+      viewCert: "View Certificate",
+      items: [
+        { value:"Top score", label:"Oracle Academy competition (Sept 2023)" },
+        { value:"3×", label:"IPWorkshop summer schools attended", certLink:"./diplomas/DiplomeIPW.pdf" },
+        { value:"CCNA 1–3", label:"Cisco Networking Academy", certLink:"./diplomas/CCNA.pdf" },
+        { value:"ECDL", label:"European Computer Driving Licence", certLink:"./diplomas/ECDL.pdf" },
+        { value:"1 yr", label:"Freelance Web Solutions Engineer — WPForge", type:"experience", desc:"One year of freelance collaboration maintaining and deploying websites. Built boxcuisine.ro, raiulverde.ro, and powerpoker.ro from scratch, while managing server infrastructure and ongoing maintenance for client projects." },
+        { value:"Asus 2023", label:"Asus Challenge - TIC Competition", certLink:"./diplomas/ASUS2023.pdf"},
+        { value:"Asus 2024", label:"Asus Challenge - TIC Competition", certLink:"./diplomas/ASUS2024.pdf"}
+      ]
+    },
+    passions: {
+      title: "Passions",
+      lead: "When I'm not behind a keyboard, I'm probably outside — here's what keeps me moving.",
+      items: [
+        { icon:"bike", title:"Cycling" },
+        { icon:"pingpong", title:"Ping-Pong" },
+        { icon:"swim", title:"Swimming" },
+        { icon:"hike", title:"Mountain Hiking" }
+      ]
+    },
+    contact: {
+      title: "Get In Touch",
+      subtitle: "Open to internships, collaborations, and interesting problems to solve.",
+      emailLabel: "Email", githubLabel: "GitHub", linkedinLabel: "LinkedIn"
+    },
+    footer: "© 2026 Prodan Eric-Alexandru. Built with care."
+  },
+  ro: {
+    nav: { about:"Despre", education:"Educatie & Competente", training:"Training", projects:"Proiecte", achievements:"Realizari", passions:"Pasiuni", contact:"Contact" },
+    hero: {
+      eyebrow: "Salut, sunt",
+      role: "Student la Inginerie Informatica",
+      quote: "Pasionat de sisteme low-level, automatizare si construirea viitorului.",
+      cta1: "Citeste CV-ul Meu",
+      cta2: "Descarca PDF",
+      chips: [
+        { text: "Linux zilnic" },
+        { text: "Rust & C++ modern" },
+        { text: "Fan One Piece" },
+        { text: "construiesc SFS", live: true }
+      ]
+    },
+    about: {
+      title: "Despre Mine",
+      text: "Sunt student la Facultatea de Automatica si Calculatoare (Universitatea Politehnica din Bucuresti), cu un interes puternic pentru programarea de inalta performanta in C si Inteligenta Artificiala. Pasiunea mea este sa explorez intersectia dintre eficienta algoritmica si modelele inteligente pentru a dezvolta utilitare practice si automatizate. Mereu dornic sa-mi extind orizonturile tehnice, imbun rigoarea din informatica cu o dedicare de o viata pentru sport, ceea ce m-a invatat disciplina si perseverenta.",
+      text2: "In afara programarii, imi petrec timpul liber intre proiecte personale in Rust/C++, configurarea sistemului Linux si urmarirea One Piece — in prezent animeul meu preferat, de departe.",
+      factRoleLabel: "Rol", factRole: "Student la Inginerie Informatica",
+      factUniLabel: "Universitate", factUni: "UPB — Automatica & Calculatoare",
+      factFocusLabel: "Focus", factFocus: "Programare de Sistem & AI"
+    },
+    education: {
+      title: "Educatie & Competente",
+      eduHeading: "Educatie",
+      uniDegree: "Licenta in Inginerie Informatica",
+      uniPlace: "Facultatea de Automatica si Calculatoare, Universitatea Politehnica din Bucuresti",
+      uniStatus: "Anul 1 — In curs",
+      hsDegree: "Diploma de Bacalaureat",
+      hsStatus: "Profil Matematica-Informatica, Intensiv Informatica",
+      skillsHeading: "Competente",
+      corePassions: "Pasiuni Principale",
+      alsoKnow: "De Asemenea Cunosc",
+      toolsLabel: "Instrumente & Tehnologii", toolsValue: "Linux / Bash, Git / GitHub, GitHub Actions, Docker / Kubernetes, Slint UI, ECDL",
+      netLabel: "Retelistica", netValue: "Concepte Cisco CCNA 1, 2 & 3",
+      spokenLabel: "Limbi Straine", spokenValue: "Romana (Nativ), Engleza (Fluent)"
+    },
+    training: {
+      title: "Training si Certificari",
+      items: [
+        { year:"2025", title:"Aplicatii Desktop in Rust", provider:"Scoala de vara IPWorkshop", desc:"Am invatat programare in Rust si dezvoltare de interfete grafice cu Slint." },
+        { year:"2024", title:"Track Kubernetes", provider:"Scoala de vara IPWorkshop", desc:"Am explorat orchestrarea containerelor si strategii de deployment." },
+        { year:"2023", title:"Track IoT", provider:"Scoala de vara IPWorkshop", desc:"Am programat un Raspberry Pi Pico H folosind Micro-Python." },
+        { year:"2022–2023", title:"CCNA 1, 2 & 3", provider:"Cisco Networking Academy — prin Facultatea de Automatica si Calculatoare", desc:"Am finalizat cursurile fundamentale de retelistica." },
+        { year:"2018–2019", title:"Curs Web Design", provider:"StepITAcademy", desc:"Am invatat tehnologii web de baza (HTML/CSS)." }
+      ]
+    },
+    projects: {
+      title: "Proiecte Notabile",
+      wipLabel: "In lucru",
+      linkLabel: "Vezi pe GitHub",
+      items: [
+        { title:"SFS", desc:"Un proiect prin care vreau sa ajut studentii sa isi lanseze propriile idei. Incep cu o aplicatie-far sub numele SFS, cu scopul de a oferi, pe termen lung, vizibilitate si sprijin altor proiecte ale studentilor.", tags:["Students for Students"], wip:true },
+        { title:"SoundProc", desc:"Am dezvoltat un utilitar digital specializat in C/C++ pentru procesarea sunetului si analiza semnalelor.", tags:["C","C++","Procesare Semnal"], link:"https://github.com/cire1773/Sound-Processor" },
+        { title:"Show Tracker", desc:"Am construit o aplicatie desktop folosind Rust si Slint UI pentru gestionarea serialelor preferate, incluzand evaluari dinamice si status.", tags:["Rust","Slint UI"] },
+        { title:"Uni-Schedule-Mail", desc:"Am dezvoltat un sistem automatizat folosind Python si GitHub Actions care extrage orarul din Excel si trimite rezumate zilnice prin email HTML.", tags:["Python","GitHub Actions"], link:"https://github.com/cire1773/Uni-Schedule-Mail" },
+        { title:"Smart Doorbell", desc:"Am programat o solutie hardware IoT folosind Raspberry Pi Pico H si Micro-Python, demonstrand integrarea practica a senzorilor.", tags:["Micro-Python","IoT"] },
+        { title:"Sudoku Solver", desc:"Am implementat un solver recursiv, extrem de optimizat in C pur, demonstrand expertiza in managementul memoriei si eficienta algoritmica.", tags:["C","Algoritmi"], link:"https://github.com/cire1773/Sudoku-Solver" },
+        { title:"Jocuri Java Greenfoot", desc:"Am creat un joc strategic Tower Defense si un joc de actiune pentru competitia Oracle Academy, obtinand un punctaj aproape maxim.", tags:["Java","Greenfoot"], award:"Premiat Sept 2023" }
+      ]
+    },
+    achievements: {
+      title: "Realizari",
+      viewCert: "Vezi Certificatul",
+      items: [
+        { value:"Scor maxim", label:"Competitia Oracle Academy (Sept 2023)" },
+        { value:"3×", label:"Scoli de vara IPWorkshop urmate", certLink:"./diplomas/DiplomeIPW.pdf" },
+        { value:"CCNA 1–3", label:"Cisco Networking Academy", certLink:"./diplomas/CCNA.pdf" },
+        { value:"ECDL", label:"Licenta Europeana de Conducere a Computerului", certLink:"./diplomas/ECDL.pdf" },
+        { value:"1 an", label:"Freelance Web Solutions Engineer — WPForge", type:"experience", desc:"Un an de colaborare freelance in mentenanta si deploy-ul de site-uri. Am dezvoltat boxcuisine.ro, raiulverde.ro si powerpoker.ro de la zero, administrand in paralel infrastructura serverelor si mentenanta proiectelor clientilor." },
+        { value:"Asus 2023", label:"Asus Challenge - Competitie TIC", certLink:"./diplomas/ASUS2023.pdf"},
+        { value:"Asus 2024", label:"Asus Challenge - Competitie TIC", certLink:"./diplomas/ASUS2024.pdf"}
+      ]
+    },
+    passions: {
+      title: "Pasiuni",
+      lead: "Cand nu sunt la tastatura, probabil sunt afara — iata ce ma tine in miscare.",
+      items: [
+        { icon:"bike", title:"Ciclism" },
+        { icon:"pingpong", title:"Ping-Pong" },
+        { icon:"swim", title:"Inot" },
+        { icon:"hike", title:"Drumetii montane" }
+      ]
+    },
+    contact: {
+      title: "Hai sa Vorbim",
+      subtitle: "Deschis pentru internship-uri, colaborari si probleme interesante de rezolvat.",
+      emailLabel: "Email", githubLabel: "GitHub", linkedinLabel: "LinkedIn"
+    },
+    footer: "© 2026 Prodan Eric-Alexandru. Realizat cu grija."
+  }
+};
+
+/* ============ STATE & HELPERS ============ */
+let currentLang = localStorage.getItem('lang') || (navigator.language.toLowerCase().startsWith('ro') ? 'ro' : 'en');
+
+function t(path) {
+  return path.split('.').reduce((o,k) => (o ? o[k] : undefined), i18n[currentLang]);
+}
+
+function renderSkillBadges() {
+  document.getElementById('coreSkills').innerHTML = skillsCore.map(s => `<span class="badge-skill core">${s}</span>`).join('');
+  document.getElementById('otherSkills').innerHTML = skillsOther.map(s => `<span class="badge-skill">${s}</span>`).join('');
+}
+
+function renderTraining() {
+  document.getElementById('trainingList').innerHTML = t('training.items').map(item => `
+    <div class="timeline-item">
+      <div class="timeline-marker mono">${item.year}</div>
+      <div class="timeline-content">
+        <h3>${item.title}</h3>
+        <p class="timeline-provider mono">${item.provider}</p>
+        <p class="timeline-desc">${item.desc}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderProjects() {
+  const linkLabel = t('projects.linkLabel');
+  const wipLabel = t('projects.wipLabel');
+  document.getElementById('projectsGrid').innerHTML = t('projects.items').map(p => `
+    <div class="project-card">
+      ${p.award ? `<span class="award-badge">★ ${p.award}</span>` : ''}
+      ${p.wip ? `<span class="wip-badge"><span class="wip-dot"></span>${wipLabel}</span>` : ''}
+      <h3>${p.title}</h3>
+      <p>${p.desc}</p>
+      <div class="project-tags">${p.tags.map(tag => `<span class="tag-mini">${tag}</span>`).join('')}</div>
+      ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" class="project-link">${linkLabel} →</a>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderAchievements() {
+  const viewCertLabel = t('achievements.viewCert');
+  const docIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`;
+
+  document.getElementById('achievementsGrid').innerHTML = t('achievements.items').map(a => {
+    const isExp = a.type === 'experience';
+    const certBtn = a.certLink ? `<a href="${a.certLink}" target="_blank" rel="noopener" class="cert-link">${docIcon} ${viewCertLabel}</a>` : '';
+    const desc = a.desc ? `<p class="achievement-desc">${a.desc}</p>` : '';
+    const sites = isExp ? `<div class="achievement-sites">
+      <a href="https://boxcuisine.ro" target="_blank" rel="noopener" class="site-link">boxcuisine.ro<span class="ext">↗</span></a>
+      <a href="https://raiulverde.ro" target="_blank" rel="noopener" class="site-link">raiulverde.ro<span class="ext">↗</span></a>
+      <a href="https://powerpoker.ro" target="_blank" rel="noopener" class="site-link">powerpoker.ro<span class="ext">↗</span></a>
+    </div>` : '';
+
+    if (isExp) {
+      return `
+      <div class="achievement-card experience">
+        <div class="achievement-value mono">${a.value}</div>
+        <div class="achievement-meta">
+          <div class="achievement-label">${a.label}</div>
+          ${desc}
+          ${sites}
+        </div>
+      </div>`;
+    }
+
+    return `
+    <div class="achievement-card">
+      <div class="achievement-value mono">${a.value}</div>
+      <div class="achievement-label">${a.label}</div>
+      ${certBtn}
+    </div>
+  `}).join('');
+}
+
+const passionIcons = {
+  bike: '<circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>',
+  pingpong: '<ellipse cx="9" cy="9" rx="5" ry="6" transform="rotate(45 9 9)"/><path d="M13 13l6 6"/><circle cx="19" cy="5" r="1.6" fill="currentColor" stroke="none"/>',
+  swim: '<path d="M2 7c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 13c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 19c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>',
+  hike: '<path d="M3 20l6-10 4 6 2-3 6 7z"/><circle cx="14" cy="6" r="2"/>'
+};
+const passionMeta = {
+  bike:    { theme: 'orange', link: 'index.html' },
+  pingpong:{ theme: '',       diploma: './diplomas/PING-PONG.pdf' },
+  swim:    { theme: '' },
+  hike:    { theme: 'green',  link: 'index.html' }
+};
+
+function renderPassions() {
+  const diplomaLabel = currentLang === 'ro' ? 'Vezi Diploma' : 'View Diploma';
+  const docIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`;
+  document.getElementById('passionsGrid').innerHTML = t('passions.items').map(p => {
+    const meta = passionMeta[p.icon] || {};
+    const themeClass = meta.theme ? ` ${meta.theme}` : '';
+    const cardContent = `
+      <div class="passion-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${passionIcons[p.icon]}</svg>
+      </div>
+      <div class="passion-title">${p.title}</div>
+      ${meta.diploma ? `<a href="${meta.diploma}" target="_blank" rel="noopener" class="diploma-link">${docIcon} ${diplomaLabel}</a>` : ''}
+    `;
+    if (meta.link) {
+      return `<a href="${meta.link}" class="passion-card${themeClass}">${cardContent}</a>`;
+    }
+    return `<div class="passion-card${themeClass}">${cardContent}</div>`;
+  }).join('');
+}
+
+function renderHeroChips() {
+  document.getElementById('heroChips').innerHTML = t('hero.chips').map(c => `
+    <span class="hero-chip${c.live ? ' live' : ''}">${c.live ? '<span class="chip-dot"></span>' : ''}${c.text}</span>
+  `).join('');
+}
+
+let typingTimer;
+function restartTyping() {
+  clearTimeout(typingTimer);
+  const el = document.getElementById('typedQuote');
+  const text = t('hero.quote');
+  el.textContent = '';
+  let i = 0;
+  (function step(){
+    if (i <= text.length) {
+      el.textContent = text.slice(0, i);
+      i++;
+      typingTimer = setTimeout(step, 22);
+    }
+  })();
+}
+
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = t(el.getAttribute('data-i18n'));
+    if (typeof val === 'string') el.textContent = val;
+  });
+  document.getElementById('langVal').textContent = currentLang.toUpperCase();
+  renderHeroChips();
+  renderTraining();
+  renderProjects();
+  renderAchievements();
+  renderPassions();
+  restartTyping();
+  localStorage.setItem('lang', currentLang);
+}
+
+/* ============ THEME TOGGLE ============ */
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('themeVal').textContent = next.toUpperCase();
+});
+
+/* ============ LANGUAGE TOGGLE ============ */
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'en' ? 'ro' : 'en';
+  applyLanguage();
+});
+
+/* ============ MOBILE NAV ============ */
+const navToggle = document.getElementById('navToggle');
+const navLinksEl = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  navLinksEl.classList.toggle('open');
+  navToggle.classList.toggle('active');
+});
+document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => {
+  navLinksEl.classList.remove('open');
+  navToggle.classList.remove('active');
+}));
+
+/* ============ SCROLLSPY + NAV BG + BACK-TO-TOP ============ */
+const sections = document.querySelectorAll('section[id]');
+const navAnchors = document.querySelectorAll('#navLinks a');
+function onScroll() {
+  const scrollY = window.pageYOffset;
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY > 40);
+  let current = '';
+  sections.forEach(sec => { if (scrollY >= sec.offsetTop - 130) current = sec.id; });
+  navAnchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+  document.getElementById('toTop').classList.toggle('show', scrollY > 500);
+}
+window.addEventListener('scroll', onScroll);
+document.getElementById('toTop').addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+/* ============ SCROLL REVEAL ============ */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ============ INIT ============ */
+document.getElementById('themeVal').textContent = document.documentElement.getAttribute('data-theme').toUpperCase();
+renderSkillBadges();
+applyLanguage();
+onScroll();
+</script>
 </body>
 </html>
