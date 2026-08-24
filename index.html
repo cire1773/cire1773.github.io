@@ -548,6 +548,7 @@ const i18n = {
     training: {
       title: "Training & Certifications",
       items: [
+        { year:"August 2026", title:"Machine Learning Track", provider:"IPWorkshop Summer School", desc:"Built a chess Elo rating prediction and position solver project using Stockfish evaluations and XGBoost." },
         { year:"2025", title:"Desktop Applications in Rust", provider:"IPWorkshop Summer School", desc:"Learned Rust programming and UI development with Slint." },
         { year:"2024", title:"Kubernetes Track", provider:"IPWorkshop Summer School", desc:"Explored container orchestration and deployment strategies." },
         { year:"2023", title:"IoT Track", provider:"IPWorkshop Summer School", desc:"Programmed a Raspberry Pi Pico H using Micro-Python." },
@@ -561,6 +562,7 @@ const i18n = {
       linkLabel: "View on GitHub",
       items: [
         { title:"SFS", desc:"A venture I'm building to help students launch their own ideas. Starting with a flagship app under the SFS name to build traction, with the long-term goal of giving other student projects visibility and support.", tags:["Students for Students"], wip:true },
+        { title:"Elo Guesser", desc:"Developed a Machine Learning pipeline using XGBoost and Stockfish engine metrics to predict chess player Elo ratings based on game move lists.", tags:["Python","Machine Learning","XGBoost"], link:"https://github.com/cire1773/Elo-Guesser-ML" },
         { title:"SoundProc", desc:"Engineered a specialized digital sound processing utility in C/C++ for precise audio manipulation and signal analysis.", tags:["C","C++","Signal Processing"], link:"https://github.com/cire1773/Sound-Processor" },
         { title:"Show Tracker", desc:"Built a desktop application using Rust and Slint UI to manage and track favorite shows, featuring dynamic rating, watch progress, and status updates.", tags:["Rust","Slint UI"] },
         { title:"Uni-Schedule-Mail", desc:"Developed an automated notification system using Python and GitHub Actions that parses Excel university schedules and delivers daily HTML email summaries.", tags:["Python","GitHub Actions"], link:"https://github.com/cire1773/Uni-Schedule-Mail" },
@@ -574,7 +576,7 @@ const i18n = {
       viewCert: "View Certificate",
       items: [
         { value:"Top score", label:"Oracle Academy competition (Sept 2023)" },
-        { value:"3×", label:"IPWorkshop summer schools attended", certLink:"./diplomas/DiplomeIPW.pdf" },
+        { value:"4×", label:"IPWorkshop summer schools attended", certLink:"./diplomas/DiplomeIPW.pdf" },
         { value:"CCNA 1–3", label:"Cisco Networking Academy", certLink:"./diplomas/CCNA.pdf" },
         { value:"ECDL", label:"European Computer Driving Licence", certLink:"./diplomas/ECDL.pdf" },
         { value:"1 yr", label:"Freelance Web Solutions Engineer — WPForge", type:"experience", desc:"One year of freelance collaboration maintaining and deploying websites. Built boxcuisine.ro, raiulverde.ro, and powerpoker.ro from scratch, while managing server infrastructure and ongoing maintenance for client projects." },
@@ -640,6 +642,7 @@ const i18n = {
     training: {
       title: "Training si Certificari",
       items: [
+        { year:"August 2026", title:"Track de Machine Learning", provider:"Scoala de vara IPWorkshop", desc:"Am dezvoltat un proiect de estimare a ratingului Elo la șah și un solver de poziții bazat pe evaluări Stockfish și XGBoost." },
         { year:"2025", title:"Aplicatii Desktop in Rust", provider:"Scoala de vara IPWorkshop", desc:"Am invatat programare in Rust si dezvoltare de interfete grafice cu Slint." },
         { year:"2024", title:"Track Kubernetes", provider:"Scoala de vara IPWorkshop", desc:"Am explorat orchestrarea containerelor si strategii de deployment." },
         { year:"2023", title:"Track IoT", provider:"Scoala de vara IPWorkshop", desc:"Am programat un Raspberry Pi Pico H folosind Micro-Python." },
@@ -653,6 +656,7 @@ const i18n = {
       linkLabel: "Vezi pe GitHub",
       items: [
         { title:"SFS", desc:"Un proiect prin care vreau sa ajut studentii sa isi lanseze propriile idei. Incep cu o aplicatie-far sub numele SFS, cu scopul de a oferi, pe termen lung, vizibilitate si sprijin altor proiecte ale studentilor.", tags:["Students for Students"], wip:true },
+        { title:"Elo Guesser", desc:"Am dezvoltat un pipeline de Machine Learning folosind XGBoost și metrici ale motorului Stockfish pentru a estima ratingul Elo al jucătorilor de șah pe baza mutărilor din joc.", tags:["Python","Machine Learning","XGBoost"], link:"https://github.com/cire1773/Elo-Guesser-ML" },
         { title:"SoundProc", desc:"Am dezvoltat un utilitar digital specializat in C/C++ pentru procesarea sunetului si analiza semnalelor.", tags:["C","C++","Procesare Semnal"], link:"https://github.com/cire1773/Sound-Processor" },
         { title:"Show Tracker", desc:"Am construit o aplicatie desktop folosind Rust si Slint UI pentru gestionarea serialelor preferate, incluzand evaluari dinamice si status.", tags:["Rust","Slint UI"] },
         { title:"Uni-Schedule-Mail", desc:"Am dezvoltat un sistem automatizat folosind Python si GitHub Actions care extrage orarul din Excel si trimite rezumate zilnice prin email HTML.", tags:["Python","GitHub Actions"], link:"https://github.com/cire1773/Uni-Schedule-Mail" },
@@ -666,7 +670,7 @@ const i18n = {
       viewCert: "Vezi Certificatul",
       items: [
         { value:"Scor maxim", label:"Competitia Oracle Academy (Sept 2023)" },
-        { value:"3×", label:"Scoli de vara IPWorkshop urmate", certLink:"./diplomas/DiplomeIPW.pdf" },
+        { value:"4×", label:"Scoli de vara IPWorkshop urmate", certLink:"./diplomas/DiplomeIPW.pdf" },
         { value:"CCNA 1–3", label:"Cisco Networking Academy", certLink:"./diplomas/CCNA.pdf" },
         { value:"ECDL", label:"Licenta Europeana de Conducere a Computerului", certLink:"./diplomas/ECDL.pdf" },
         { value:"1 an", label:"Freelance Web Solutions Engineer — WPForge", type:"experience", desc:"Un an de colaborare freelance in mentenanta si deploy-ul de site-uri. Am dezvoltat boxcuisine.ro, raiulverde.ro si powerpoker.ro de la zero, administrand in paralel infrastructura serverelor si mentenanta proiectelor clientilor." },
@@ -776,7 +780,7 @@ const passionIcons = {
 };
 const passionMeta = {
   bike:    { theme: 'orange', link: 'index.html' },
-  pingpong:{ theme: '',       diploma: './diplomas/PING-PONG.pdf' },
+  pingpong:{ theme: '',     diploma: './diplomas/PING-PONG.pdf' },
   swim:    { theme: '' },
   hike:    { theme: 'green',  link: 'index.html' }
 };
