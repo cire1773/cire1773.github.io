@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summit & Solitude — A Hiking Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem('theme');
+  if(!t){ t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+:root {
+  --bg: #0a0f0a;
+  --bg-elev: #0f1a0f;
+  --surface: #141f14;
+  --border: #1f2f1f;
+  --text: #e8f0e8;
+  --text-dim: #8a9a8a;
+  --accent: #4ade80;
+  --accent-2: #22c55e;
+  --accent-soft: rgba(74,222,128,0.12);
+  --radius: 16px;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Inter', sans-serif;
+  --display: 'Space Grotesk', sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f0fdf4;
+  --bg-elev: #dcfce7;
+  --surface: #ffffff;
+  --border: #bbf7d0;
+  --text: #14532d;
+  --text-dim: #3f6212;
+  --accent: #16a34a;
+  --accent-2: #15803d;
+  --accent-soft: rgba(22,163,74,0.10);
+}
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background .3s ease, color .3s ease;
+}
+img { display:block; max-width:100%; }
+a { color: inherit; text-decoration:none; }
+button { font: inherit; background:none; border:none; cursor:pointer; color:inherit; }
+
+/* ========== NAV ========== */
+.nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 1.2rem 0;
+  transition: background .3s, backdrop-filter .3s, border-color .3s;
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(10,15,10,0.88);
+  backdrop-filter: blur(14px);
+  border-bottom-color: var(--border);
+}
+[data-theme="light"] .nav.scrolled { background: rgba(240,253,244,0.88); }
+.nav-inner {
+  width: min(1200px, 92%); margin-inline:auto;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo {
+  font-family: var(--display); font-weight:700; font-size:1.15rem;
+  display:flex; align-items:center; gap:.6rem; letter-spacing:-0.02em;
+}
+.nav-logo svg { width:28px; height:28px; color:var(--accent); }
+.nav-right { display:flex; align-items:center; gap:2.2rem; }
+.nav-links { display:flex; gap:2.2rem; }
+.nav-links a {
+  font-size:.82rem; text-transform:uppercase; letter-spacing:.12em;
+  color: var(--text-dim); transition: color .2s; font-weight:500;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-controls { display:flex; align-items:center; gap:.6rem; }
+.directive-toggle {
+  height:34px; padding:0 .65rem; border:1px solid var(--border); border-radius:8px;
+  display:flex; align-items:center; gap:.35rem; font-size:.72rem;
+  color:var(--text-dim); cursor:pointer; transition: all .2s ease; user-select:none;
+  font-family: var(--display); background: transparent;
+}
+.directive-toggle:hover { border-color: var(--accent); background: var(--accent-soft); }
+.directive-toggle .d-kw { color: var(--accent-2); }
+.directive-toggle .d-name { color: var(--text-dim); }
+.directive-toggle .d-val { color: var(--accent); font-weight:700; min-width: 2.2ch; text-align:left; }
+.nav-toggle { display:none; flex-direction:column; gap:4px; width:22px; background:none; border:none; padding:0; }
+.nav-toggle span { height:2px; background:var(--text); border-radius:2px; transition:.25s; display:block; }
+.nav-toggle.active span:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+.nav-toggle.active span:nth-child(2){ opacity:0; }
+.nav-toggle.active span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
+@media (max-width: 700px) {
+  .nav-right { position: fixed; top:64px; left:0; right:0; background:var(--bg); flex-direction:column; padding:1.5rem; gap:1.25rem; border-bottom:1px solid var(--border); transform:translateY(-140%); transition:transform .3s ease; align-items:flex-start; }
+  .nav-right.open { transform:translateY(0); }
+  .nav-links { flex-direction: column; gap:1.25rem; }
+  .nav-controls { width:100%; justify-content:flex-start; }
+  .nav-toggle { display:flex; }
+}
+@media (max-width: 380px) {
+  .directive-toggle .d-kw { display:none; }
+}
+
+/* ========== HERO ========== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #0f1f0f 0%, var(--bg) 70%);
+  padding: 100px 1.5rem 3rem;
+  gap: 0;
+}
+[data-theme="light"] .hero { background: radial-gradient(ellipse 80% 60% at 50% 40%, #dcfce7 0%, var(--bg) 70%); }
+.hero-title-wrap {
+  text-align: center;
+  z-index: 2;
+  margin-bottom: 1rem;
+}
+.hero-eyebrow {
+  font-family: var(--sans); font-size:.72rem;
+  text-transform:uppercase; letter-spacing:.22em; color:var(--accent-2);
+  margin-bottom:1rem;
+}
+.hero h1 {
+  font-family: var(--serif); font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight:700; line-height:0.95; letter-spacing:-0.02em;
+}
+.hero h1 em {
+  font-style:italic; color:var(--accent);
+}
+.hero-visual {
+  z-index: 1;
+  width: min(85vw, 900px);
+  max-width: 700px;
+  margin: 0.5rem 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 120px rgba(74,222,128,0.08);
+}
+[data-theme="light"] .hero-visual {
+  box-shadow: 0 20px 50px rgba(20,83,45,0.12), 0 0 80px rgba(22,163,74,0.06);
+}
+.hero-visual img {
+  width: 100%; height: auto;
+  display: block;
+}
+.hero-stats {
+  display:flex; justify-content:center; gap:3.5rem; flex-wrap:wrap;
+  z-index: 2;
+  margin-top: 1rem;
+}
+.hero-stat { text-align:center; }
+.hero-stat .num {
+  font-family: var(--display); font-size:2.4rem; font-weight:700; color:var(--accent);
+  line-height:1;
+}
+.hero-stat .lbl {
+  font-size:.68rem; text-transform:uppercase; letter-spacing:.18em;
+  color:var(--text-dim); margin-top:.5rem;
+}
+.scroll-hint {
+  position:absolute; bottom:1rem; left:50%; transform:translateX(-50%);
+  z-index:2; color:var(--text-dim);
+  animation: bob 2.5s ease-in-out infinite;
+}
+.scroll-hint svg { width:22px; height:22px; }
+@keyframes bob { 0%,100%{transform:translate(-50%,0);} 50%{transform:translate(-50%,10px);} }
+
+@media (max-width: 600px) {
+  .hero { padding-top: 90px; }
+  .hero-visual { width: 95vw; }
+  .hero-stats { gap: 2rem; }
+  .hero-stat .num { font-size: 2rem; }
+}
+
+/* ========== SECTIONS ========== */
+.container { width: min(1100px, 92%); margin-inline:auto; }
+.section { padding: 6rem 0; }
+.section-alt { background: var(--bg-elev); }
+
+.section-header {
+  text-align:center; margin-bottom:4rem;
+}
+.section-header h2 {
+  font-family: var(--serif); font-size: clamp(2rem, 4vw, 3rem);
+  font-weight:700; margin-bottom:.6rem;
+}
+.section-header p {
+  font-family: var(--serif); font-style:italic; font-size:1.15rem;
+  color: var(--text-dim); max-width: 520px; margin-inline:auto;
+}
+
+/* ========== JOURNAL ENTRIES ========== */
+.journal-list { display:flex; flex-direction:column; gap:4rem; }
+
+.entry {
+  display:grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+.entry:nth-child(even) {
+  grid-template-columns: 1fr 280px;
+}
+.entry:nth-child(even) .entry-visual { order:2; }
+.entry:nth-child(even) .entry-body { order:1; }
+
+.entry-visual {
+  position:relative; border-radius: var(--radius); overflow:hidden;
+  border: 1px solid var(--border);
+}
+.entry-visual img {
+  width:100%; height:340px; object-fit:cover;
+  transition: transform .6s ease;
+}
+.entry-visual:hover img { transform: scale(1.05); }
+.entry-visual::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(0deg, rgba(10,15,10,0.5) 0%, transparent 50%);
+  pointer-events:none;
+}
+[data-theme="light"] .entry-visual::after {
+  background: linear-gradient(0deg, rgba(240,253,244,0.5) 0%, transparent 50%);
+}
+.entry-badge {
+  position:absolute; bottom:1rem; left:1rem; z-index:2;
+  background: var(--accent); color: var(--bg);
+  font-family: var(--display); font-size:.72rem; font-weight:700;
+  padding: .35rem .7rem; border-radius: 6px;
+  text-transform:uppercase; letter-spacing:.08em;
+}
+
+.entry-body { padding-top:.5rem; }
+.entry-meta {
+  display:flex; gap:1.2rem; align-items:center; margin-bottom:1rem;
+  font-size:.78rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.1em;
+}
+.entry-meta .dot { width:4px; height:4px; background:var(--accent); border-radius:50%; }
+.entry-body h3 {
+  font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight:700; margin-bottom:.8rem; line-height:1.2;
+}
+.entry-body h3 a { transition: color .2s; }
+.entry-body h3 a:hover { color: var(--accent); }
+.entry-body p {
+  color: var(--text-dim); font-size:.95rem; line-height:1.75;
+  margin-bottom:1.2rem;
+}
+/* New CSS for Ratings */
+.entry-ratings {
+  display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem;
+  font-size: 0.8rem; font-family: var(--sans); color: var(--text-dim);
+}
+.entry-ratings span {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 0.3rem 0.6rem; border-radius: 6px;
+  display: flex; align-items: center; gap: 0.3rem;
+}
+.entry-ratings strong { color: var(--accent-2); font-weight: 600; }
+
+.read-more {
+  font-family: var(--display); font-size:.82rem; font-weight:600;
+  color: var(--accent); text-transform:uppercase; letter-spacing:.08em;
+  display:inline-flex; align-items:center; gap:.4rem;
+  transition: gap .2s;
+}
+.read-more:hover { gap:.7rem; }
+
+@media (max-width: 800px) {
+  .entry, .entry:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+  .entry:nth-child(even) .entry-visual,
+  .entry:nth-child(even) .entry-body { order: unset; }
+  .entry-visual img { height:260px; }
+}
+
+/* ========== GEAR GRID ========== */
+.gear-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+.gear-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2rem;
+  transition: all .3s ease;
+}
+.gear-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+[data-theme="light"] .gear-card:hover {
+  box-shadow: 0 12px 32px rgba(20,83,45,0.12);
+}
+.gear-card .icon {
+  width:48px; height:48px; border-radius:12px;
+  background: var(--accent-soft); color: var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:1.2rem;
+}
+.gear-card .icon svg { width:24px; height:24px; }
+.gear-card h4 {
+  font-family: var(--display); font-size:1rem; font-weight:600;
+  margin-bottom:.4rem;
+}
+.gear-card p {
+  font-size:.85rem; color:var(--text-dim); line-height:1.6;
+}
+
+/* ========== PHOTO GALLERY ========== */
+.gallery {
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .75rem;
+}
+.gallery-item {
+  position:relative; border-radius:12px; overflow:hidden;
+  border: 1px solid var(--border); cursor:pointer;
+}
+.gallery-item img {
+  width:100%; height:220px; object-fit:cover;
+  transition: transform .5s ease;
+}
+.gallery-item:hover img { transform: scale(1.08); }
+.gallery-item.tall { grid-row: span 2; }
+.gallery-item.tall img { height: 100%; min-height: 460px; }
+.gallery-item.wide { grid-column: span 2; }
+
+@media (max-width: 900px) {
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  .gallery-item.wide { grid-column: span 2; }
+  .gallery-item.tall { grid-row: span 1; }
+  .gallery-item.tall img { height:220px; min-height:auto; }
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  border-top: 1px solid var(--border); padding: 3rem 0;
+  text-align:center;
+}
+.footer p {
+  font-family: var(--serif); font-style:italic;
+  color: var(--text-dim); font-size:1rem;
+}
+.footer .back {
+  display:inline-flex; align-items:center; gap:.5rem;
+  margin-top:1.2rem; font-family: var(--display); font-size:.8rem;
+  text-transform:uppercase; letter-spacing:.1em; color:var(--accent);
+  transition: gap .2s;
+}
+.footer .back:hover { gap:.8rem; }
+
+/* ========== REVEAL ANIMATIONS ========== */
+.reveal {
+  opacity:0; transform: translateY(30px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.in-view { opacity:1; transform: translateY(0); }
+
+/* ========== DIVIDER ========== */
+.divider {
+  width: 60px; height: 2px; background: var(--accent);
+  margin: 0 auto 3rem; border-radius: 2px;
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 20l6-10 4 6 2-3 6 7z"/>
+        <circle cx="14" cy="6" r="2"/>
+      </svg>
+      Summit & Solitude
+    </a>
+    <div class="nav-right" id="navRight">
+      <div class="nav-links">
+        <a href="#journal" data-i18n="nav.journal">Journal</a>
+        <a href="#gear" data-i18n="nav.gear">Gear</a>
+        <a href="#gallery" data-i18n="nav.gallery">Gallery</a>
+      </div>
+      <div class="nav-controls">
+        <button class="directive-toggle" id="langToggle" type="button" aria-label="Toggle language">
+          <span class="d-name">LANG</span><span class="d-val" id="langVal">EN</span>
+        </button>
+        <button class="directive-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+          <span class="d-name">THEME</span><span class="d-val" id="themeVal">DARK</span>
+        </button>
+      </div>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-title-wrap">
+    <p class="hero-eyebrow" data-i18n="hero.eyebrow">One step at a time.</p>
+    <h1>Summit & <em>Solitude</em></h1>
+  </div>
+
+  <div class="hero-visual">
+    <img src="images/hiking_photo_1.jpg" alt="Mountain ridge">
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="num">3</div>
+      <div class="lbl" data-i18n="hero.statClimbed">Recent Hikes</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">11</div>
+      <div class="lbl" data-i18n="hero.statPeaks">Peaks reached</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">21</div>
+      <div class="lbl" data-i18n="hero.statTrails">Trails</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+</section>
+
+<!-- JOURNAL -->
+<section id="journal" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 data-i18n="journal.title">The Journal</h2>
+      <p data-i18n="journal.subtitle">Stories from the trail — sore feet, breathtaking views, and the silence above the treeline.</p>
+    </div>
+    <div class="divider reveal"></div>
+
+    <div class="journal-list" id="journalList"></div>
+  </div>
+</section>
+
+<!-- GEAR -->
+<section id="gear" class="section section-alt">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 data-i18n="gear.title">The Kit</h2>
+      <p data-i18n="gear.subtitle">Every kilogram on your back is a kilogram you will curse by hour three. Here is what I trust.</p>
+    </div>
+    <div class="divider reveal"></div>
+
+    <div class="gear-grid" id="gearGrid"></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 data-i18n="gallery.title">On Film</h2>
+      <p data-i18n="gallery.subtitle">Some summits deserve more than words.</p>
+    </div>
+    <div class="divider reveal"></div>
+
+    <div class="gallery">
+      <div class="gallery-item tall reveal">
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=80" alt="Mountain panorama">
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600&q=80" alt="Snowy ridge">
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&q=80" alt="Hiker on summit">
+      </div>
+      <div class="gallery-item wide reveal">
+        <img src="https://images.unsplash.com/photo-1465188162913-8fb5709d6d57?w=900&q=80" alt="Valley at sunset">
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&q=80" alt="Forest trail">
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80" alt="Misty mountains">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <p data-i18n="footer.quote">"The mountains are calling and I must go."</p>
+    <a href="index.html" class="back" data-i18n="footer.back">&larr; Back to Portfolio</a>
+  </div>
+</footer>
+
+<script>
+const i18n = {
+  en: {
+    nav: { journal: "Journal", gear: "Gear", gallery: "Gallery" },
+    hero: {
+      eyebrow: "One step at a time.",
+      statClimbed: "Recent Hikes",
+      statPeaks: "Peaks reached",
+      statTrails: "Trails"
+    },
+    journal: {
+      title: "The Journal",
+      subtitle: "Stories from the trail — sore feet, breathtaking views, and the silence above the treeline.",
+      labels: { difficulty: "Difficulty", view: "View", access: "Access" },
+      entries: [
+        {
+          badge: "Latest",
+          date: "6 hours",
+          location: "Bucegi Mountains",
+          elevation: "1,197 m",
+          title: "Camping Zănoaga - Scropoasa Lake - 7 Springs Waterfall",
+          text: "A beautiful and relaxing walk alongside the river. The turquoise waters of Scropoasa Lake and the mythical 7 Springs Waterfall make this a highly rewarding trail for minimal effort. Perfect for a chill weekend escape in nature.",
+          ratings: { difficulty: "5/10", view: "4/5", access: "3/5 (Car to Zănoaga)" },
+          readMore: "Read the story \u2192",
+          link: "CampingZanoaga.html"
+        },
+        {
+          date: "5 hours",
+          location: "Făgăraș Mountains",
+          elevation: "1,250 m",
+          title: "Valea lui Stan",
+          text: "An adventurous, canyoning-like trail featuring metal ladders, steep steps, and narrow passages above rushing water. It's an adrenaline-filled loop that tests your footwork and rewards you with stunning gorge views.",
+          ratings: { difficulty: "6/10", view: "5/5", access: "4/5 (Transfăgărășan)" },
+          readMore: "Read the story \u2192",
+          link: "ValeaLuiStan.html"
+        },
+        {
+          date: "3.5 hours",
+          location: "Piatra Mare Mountains",
+          elevation: "948 m",
+          title: "7 Ladders Canyon (Canionul 7 Scări)",
+          text: "Famous for its near-vertical metal ladders climbing right alongside cascading waterfalls. It's a thrilling, wet, and refreshing hike through a narrow limestone gorge that guarantees you won't leave completely dry.",
+          ratings: { difficulty: "3/10", view: "3/5", access: "5/5 (Near Brașov)" },
+          readMore: "Read the story \u2192",
+          link: "7Scari.html"
+        }
+      ]
+    },
+    gear: {
+      title: "The Kit",
+      subtitle: "Every kilogram on your back is a kilogram you will curse by hour three. Here is what I trust.",
+      items: [
+        {
+          icon: "<path d=\"M3 20l6-10 4 6 2-3 6 7z\"/><circle cx=\"14\" cy=\"6\" r=\"2\"/>",
+          title: "Rucsac Mil-Tec Assault Pack Large 36 l",
+          desc: "My go-to tactical black backpack. It is rugged, spacious enough for all the layers and food, and sits perfectly during long ascents."
+        },
+        {
+          icon: "<path d=\"M12 2L2 7l10 5 10-5-10-5z\"/><path d=\"M2 17l10 5 10-5\"/><path d=\"M2 12l10 5 10-5\"/>",
+          title: "Trail Boots",
+          desc: "Nothing overly fancy or expensive. A solid, basic pair of boots is all it takes to keep the grip tight and avoid blisters."
+        },
+        {
+          icon: "<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/>",
+          title: "Classic Watch & Screenless Tracker",
+          desc: "I ditched the smartwatch. Now, I wear a normal watch paired with a Whoop-style screenless fitness band to track the effort without the digital distractions."
+        },
+        {
+          icon: "<rect x=\"5\" y=\"2\" width=\"14\" height=\"20\" rx=\"2\" ry=\"2\"/><path d=\"M12 18h.01\"/>",
+          title: "Phone & Trail Signs",
+          desc: "No complex map setups. I rely on my phone, tracking the painted markers on the trees (like the blue cross), and interacting with other hikers for info."
+        }
+      ]
+    },
+    gallery: {
+      title: "On Film",
+      subtitle: "Some summits deserve more than words."
+    },
+    footer: {
+      quote: "\"The mountains are calling and I must go.\"",
+      back: "\u2190 Back to Portfolio"
+    }
+  },
+  ro: {
+    nav: { journal: "Jurnal", gear: "Echipament", gallery: "Galerie" },
+    hero: {
+      eyebrow: "Un pas pe r\u00e2nd.",
+      statClimbed: "Drumeții Recente",
+      statPeaks: "V\u00e2rfuri atinse",
+      statTrails: "Trasee"
+    },
+    journal: {
+      title: "Jurnalul",
+      subtitle: "Pove\u0219ti de pe potec\u0103 \u2014 picioare dureroase, priveli\u0219ti care taie respira\u021bia \u0219i lini\u0219tea deasupra limitei p\u0103durii.",
+      labels: { difficulty: "Dificultate", view: "Priveliște", access: "Acces" },
+      entries: [
+        {
+          badge: "Cel mai recent",
+          date: "6 ore",
+          location: "Munții Bucegi",
+          elevation: "1.197 m",
+          title: "Traseu Camping Zănoaga - Lacul Scropoasa - Cascada 7 Izvoare",
+          text: "O plimbare frumoasă și relaxantă de-a lungul râului. Apele turcoaz ale Lacului Scropoasa și mitica Cascadă 7 Izvoare fac din acest traseu o experiență extrem de satisfăcătoare cu un efort minim. Perfect pentru o evadare de weekend.",
+          ratings: { difficulty: "5/10", view: "4/5", access: "3/5 (Auto până la Zănoaga)" },
+          readMore: "Cite\u0219te povestea \u2192",
+          link: "CampingZanoaga.html"
+        },
+        {
+          date: "5 ore",
+          location: "Munții Făgăraș",
+          elevation: "1.250 m",
+          title: "Valea lui Stan",
+          text: "Un traseu aventuros, cu elemente de canioning, dotat cu scări metalice, trepte abrupte și pasaje înguste deasupra apei învolburate. Este un circuit plin de adrenalină care îți testează agilitatea pe stânci.",
+          ratings: { difficulty: "6/10", view: "5/5", access: "4/5 (Transfăgărășan)" },
+          readMore: "Cite\u0219te povestea \u2192",
+          link: "ValeaLuiStan.html"
+        },
+        {
+          date: "3.5 ore",
+          location: "Munții Piatra Mare",
+          elevation: "948 m",
+          title: "Canionul 7 Scări",
+          text: "Faimos pentru scările sale metalice verticale care urcă exact pe lângă cascade. Este o drumeție palpitantă, umedă și răcoroasă printr-un defileu îngust care garantează că nu vei pleca complet uscat.",
+          ratings: { difficulty: "3/10", view: "3/5", access: "5/5 (Lângă Brașov)" },
+          readMore: "Cite\u0219te povestea \u2192",
+          link: "7Scari.html"
+        }
+      ]
+    },
+    gear: {
+      title: "Echipamentul",
+      subtitle: "Fiecare kilogram din rucsac este un kilogram pe care \u00eel vei blestema dup\u0103 ora trei. Iat\u0103 \u00een ce am \u00eencredere.",
+      items: [
+        {
+          icon: "<path d=\"M3 20l6-10 4 6 2-3 6 7z\"/><circle cx=\"14\" cy=\"6\" r=\"2\"/>",
+          title: "Rucsac Mil-Tec Assault Pack Large 36 l",
+          desc: "Rucsacul meu tactic negru de bază. Este rezistent, suficient de încăpător pentru straturi și mâncare, și stă perfect pe urcările lungi."
+        },
+        {
+          icon: "<path d=\"M12 2L2 7l10 5 10-5-10-5z\"/><path d=\"M2 17l10 5 10-5\"/><path d=\"M2 12l10 5 10-5\"/>",
+          title: "Bocanci de Drumeție",
+          desc: "Nimic excesiv de pretențios. O pereche simplă și purtată suficient este tot ce trebuie pentru a menține aderența și a evita bătăturile."
+        },
+        {
+          icon: "<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/>",
+          title: "Ceas Clasic & Brățară fără Ecran",
+          desc: "Am renunțat la smartwatch. Acum port un ceas normal combinat cu o brățară de fitness tip Whoop, pentru a măsura efortul fără să mă distragă ecranele."
+        },
+        {
+          icon: "<rect x=\"5\" y=\"2\" width=\"14\" height=\"20\" rx=\"2\" ry=\"2\"/><path d=\"M12 18h.01\"/>",
+          title: "Telefon & Marcaje Montane",
+          desc: "Fără sisteme GPS complicate. Mă bazez pe telefon, urmăresc semnele vopsite pe copaci (cum ar fi crucea albastră) și interacționez cu ceilalți drumeți."
+        }
+      ]
+    },
+    gallery: {
+      title: "\u00cen Cadre",
+      subtitle: "Unele v\u00e2rfuri merit\u0103 mai mult dec\u00e2t cuvinte."
+    },
+    footer: {
+      quote: "\u201eMun\u021bii cheam\u0103 \u0219i trebuie s\u0103 plec.\u201d",
+      back: "\u2190 \u00cenapoi la Portofoliu"
+    }
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || (navigator.language.toLowerCase().startsWith('ro') ? 'ro' : 'en');
+
+function t(path) {
+  return path.split('.').reduce((o,k) => (o ? o[k] : undefined), i18n[currentLang]);
+}
+
+const journalImages = [
+  "images/lake.jpg",
+  "images/valea_lui_stan.jpg",
+  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80"
+];
+
+function renderJournal() {
+  const entries = t('journal.entries');
+  const labels = t('journal.labels');
+  if (!entries) return;
+  document.getElementById('journalList').innerHTML = entries.map((entry, idx) => `
+    <article class="entry reveal">
+      <div class="entry-visual">
+        <img src="${journalImages[idx]}" alt="${entry.title}">
+        ${entry.badge ? `<span class="entry-badge">${entry.badge}</span>` : ''}
+      </div>
+      <div class="entry-body">
+        <div class="entry-meta">
+          <span>${entry.date}</span><span class="dot"></span><span>${entry.location}</span><span class="dot"></span><span>${entry.elevation}</span>
+        </div>
+        <h3><a href="${entry.link}">${entry.title}</a></h3>
+        <p>${entry.text}</p>
+        
+        <div class="entry-ratings">
+          <span><strong>${labels.difficulty}:</strong> ${entry.ratings.difficulty}</span>
+          <span><strong>${labels.view}:</strong> ${entry.ratings.view}</span>
+          <span><strong>${labels.access}:</strong> ${entry.ratings.access}</span>
+        </div>
+
+        <a href="${entry.link}" class="read-more">${entry.readMore}</a>
+      </div>
+    </article>
+  `).join('');
+}
+
+function renderGear() {
+  const items = t('gear.items');
+  if (!items) return;
+  document.getElementById('gearGrid').innerHTML = items.map(item => `
+    <div class="gear-card reveal">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>
+      </div>
+      <h4>${item.title}</h4>
+      <p>${item.desc}</p>
+    </div>
+  `).join('');
+}
+
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = t(el.getAttribute('data-i18n'));
+    if (typeof val === 'string') el.textContent = val;
+  });
+  document.getElementById('langVal').textContent = currentLang.toUpperCase();
+  renderJournal();
+  renderGear();
+  localStorage.setItem('lang', currentLang);
+}
+
+/* Theme toggle */
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('themeVal').textContent = next.toUpperCase();
+});
+
+/* Language toggle */
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'en' ? 'ro' : 'en';
+  applyLanguage();
+  observeReveals();
+});
+
+/* Mobile nav */
+const navToggle = document.getElementById('navToggle');
+const navRight = document.getElementById('navRight');
+navToggle.addEventListener('click', () => {
+  navRight.classList.toggle('open');
+  navToggle.classList.toggle('active');
+});
+document.querySelectorAll('#navRight a').forEach(a => a.addEventListener('click', () => {
+  navRight.classList.remove('open');
+  navToggle.classList.remove('active');
+}));
+
+/* Nav scroll effect */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.pageYOffset > 60);
+});
+
+/* Reveal on scroll */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+function observeReveals() {
+  document.querySelectorAll('.reveal:not(.in-view)').forEach(el => io.observe(el));
+}
+
+/* Init */
+document.getElementById('themeVal').textContent = document.documentElement.getAttribute('data-theme').toUpperCase();
+applyLanguage();
+observeReveals();
+</script>
+
+</body>
+</html>

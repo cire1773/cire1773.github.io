@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valea lui Stan | Summit & Solitude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem('theme');
+  if(!t){ t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+:root {
+  --bg: #0a0f0a;
+  --bg-elev: #0f1a0f;
+  --surface: #141f14;
+  --border: #1f2f1f;
+  --text: #e8f0e8;
+  --text-dim: #8a9a8a;
+  --accent: #4ade80;
+  --accent-2: #22c55e;
+  --accent-soft: rgba(74,222,128,0.12);
+  --radius: 16px;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Inter', sans-serif;
+  --display: 'Space Grotesk', sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f0fdf4;
+  --bg-elev: #dcfce7;
+  --surface: #ffffff;
+  --border: #bbf7d0;
+  --text: #14532d;
+  --text-dim: #3f6212;
+  --accent: #16a34a;
+  --accent-2: #15803d;
+  --accent-soft: rgba(22,163,74,0.10);
+}
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background .3s ease, color .3s ease;
+}
+img { display:block; max-width:100%; }
+a { color: inherit; text-decoration:none; }
+button { font: inherit; background:none; border:none; cursor:pointer; color:inherit; }
+
+/* ========== NAV ========== */
+.nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 1.2rem 0;
+  transition: background .3s, backdrop-filter .3s, border-color .3s;
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(10,15,10,0.88);
+  backdrop-filter: blur(14px);
+  border-bottom-color: var(--border);
+}
+[data-theme="light"] .nav.scrolled { background: rgba(240,253,244,0.88); }
+.nav-inner {
+  width: min(1200px, 92%); margin-inline:auto;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo {
+  font-family: var(--display); font-weight:700; font-size:1.15rem;
+  display:flex; align-items:center; gap:.6rem; letter-spacing:-0.02em;
+}
+.nav-logo svg { width:28px; height:28px; color:var(--accent); }
+.nav-right { display:flex; align-items:center; gap:2.2rem; }
+.back-link {
+  font-size:.82rem; text-transform:uppercase; letter-spacing:.12em;
+  color: var(--text-dim); transition: color .2s; font-weight:600;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.back-link:hover { color: var(--accent); }
+.nav-controls { display:flex; align-items:center; gap:.6rem; }
+.directive-toggle {
+  height:34px; padding:0 .65rem; border:1px solid var(--border); border-radius:8px;
+  display:flex; align-items:center; gap:.35rem; font-size:.72rem;
+  color:var(--text-dim); cursor:pointer; transition: all .2s ease; user-select:none;
+  font-family: var(--display); background: transparent;
+}
+.directive-toggle:hover { border-color: var(--accent); background: var(--accent-soft); }
+.directive-toggle .d-kw { color: var(--accent-2); }
+.directive-toggle .d-name { color: var(--text-dim); }
+.directive-toggle .d-val { color: var(--accent); font-weight:700; min-width: 2.2ch; text-align:left; }
+
+/* ========== ARTICLE HERO ========== */
+.article-hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 1.5rem 4rem;
+  background-image: 
+    linear-gradient(to bottom, rgba(10, 15, 10, 0.4) 0%, rgba(10, 15, 10, 0.95) 100%),
+    url('images/poiana.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+[data-theme="light"] .article-hero {
+  background-image: 
+    linear-gradient(to bottom, rgba(240, 253, 244, 0.3) 0%, rgba(240, 253, 244, 0.95) 100%),
+    url('images/poiana.jpg');
+}
+.article-title {
+  z-index: 2;
+  max-width: 900px;
+}
+.article-title h1 {
+  font-family: var(--serif); font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
+}
+
+/* ========== ARTICLE LAYOUT ========== */
+.container { width: min(1100px, 92%); margin-inline:auto; }
+
+.article-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2.5rem;
+  margin-top: -3rem; 
+  position: relative;
+  z-index: 10;
+  align-items: start;
+}
+
+/* Stats Sidebar */
+.stats-sidebar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+[data-theme="light"] .stats-sidebar { box-shadow: 0 20px 40px rgba(20,83,45,0.08); }
+.stats-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
+.stat-item {
+  display: flex; flex-direction: column; gap: 0.2rem;
+  padding-bottom: 1.2rem; border-bottom: 1px solid var(--border);
+}
+.stat-item:last-child { border-bottom: none; padding-bottom: 0; }
+.stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); }
+.stat-val { font-family: var(--display); font-size: 1.1rem; font-weight: 600; color: var(--accent-2); }
+
+/* Map Box */
+.map-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 100%;
+  min-height: 400px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+[data-theme="light"] .map-container { box-shadow: 0 20px 40px rgba(20,83,45,0.08); }
+
+/* Narrative Section */
+.article-body {
+  max-width: 760px;
+  margin: 5rem auto;
+}
+.article-body p {
+  font-size: 1.1rem; line-height: 1.8; color: var(--text);
+  margin-bottom: 2rem;
+}
+.article-body img {
+  border-radius: var(--radius);
+  margin: 3rem 0;
+  border: 1px solid var(--border);
+}
+.article-body .caption {
+  text-align: center; font-size: 0.85rem; color: var(--text-dim);
+  font-style: italic; margin-top: -2rem; margin-bottom: 3rem;
+}
+
+@media (max-width: 850px) {
+  .article-grid { grid-template-columns: 1fr; margin-top: 2rem; }
+  .map-container { min-height: 300px; }
+}
+
+/* ========== FOOTER ========== */
+.footer { border-top: 1px solid var(--border); padding: 3rem 0; text-align:center; margin-top: 4rem; }
+.footer p { font-family: var(--serif); font-style:italic; color: var(--text-dim); font-size:1rem; }
+</style>
+
+<!-- LEAFLET MAPS & GPX PLUGIN -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
+<style>
+  .leaflet-top, .leaflet-bottom { z-index: 90 !important; }
+  [data-theme="dark"] .map-container { filter: brightness(0.85) contrast(1.1); }
+</style>
+
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="hiking.html" class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 20l6-10 4 6 2-3 6 7z"/>
+        <circle cx="14" cy="6" r="2"/>
+      </svg>
+    </a>
+    <div class="nav-right">
+      <a href="hiking.html" class="back-link" data-i18n="nav.back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span data-i18n="nav.backText">Back to Journal</span>
+      </a>
+      <div class="nav-controls">
+        <button class="directive-toggle" id="langToggle" type="button" aria-label="Toggle language">
+          <span class="d-name">LANG</span><span class="d-val" id="langVal">EN</span>
+        </button>
+        <button class="directive-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+          <span class="d-name">THEME</span><span class="d-val" id="themeVal">DARK</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="article-hero">
+  <div class="article-title">
+    <h1 data-i18n="hike.title">Valea lui Stan</h1>
+  </div>
+</header>
+
+<!-- STATS & MAP GRID -->
+<div class="container">
+  <div class="article-grid">
+    
+    <aside class="stats-sidebar">
+      <ul class="stats-list">
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.durationLbl">Duration</span>
+          <span class="stat-val" data-i18n="stats.durationVal">5 hours</span>
+        </li>
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.elevationLbl">Elevation</span>
+          <span class="stat-val" data-i18n="stats.elevationVal">1,250 m</span>
+        </li>
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.difficultyLbl">Difficulty</span>
+          <span class="stat-val" data-i18n="stats.difficultyVal">6/10</span>
+        </li>
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.viewLbl">View</span>
+          <span class="stat-val" data-i18n="stats.viewVal">5/5</span>
+        </li>
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.accessLbl">Access</span>
+          <span class="stat-val" data-i18n="stats.accessVal">4/5 (Transfăgărășan)</span>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="map-container" id="trailMap"></div>
+    
+  </div>
+</div>
+
+<!-- NARRATIVE TEXT & PHOTOS -->
+<main class="container">
+  <article class="article-body">
+    <p data-i18n="article.p1"></p>
+    <p data-i18n="article.p2"></p>
+    
+    <img src="images/mini_waterfall.jpg" alt="Rocky Canyon">
+    <p class="caption" data-i18n="article.cap1"></p>
+
+    <p data-i18n="article.p3"></p>
+    <p data-i18n="article.p4"></p>
+
+    <img src="images/vidraru.jpg" alt="Forest Trail">
+    <p class="caption" data-i18n="article.cap2"></p>
+
+    <p data-i18n="article.p5"></p>
+  </article>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p data-i18n="footer.quote">"The mountains are calling and I must go."</p>
+  </div>
+</footer>
+
+<script>
+const i18n = {
+  en: {
+    nav: { backText: "Back to Journal" },
+    hike: { title: "Valea lui Stan" },
+    stats: {
+      durationLbl: "Duration", durationVal: "5 hours",
+      elevationLbl: "Elevation", elevationVal: "1,250 m",
+      difficultyLbl: "Difficulty", difficultyVal: "6/10",
+      viewLbl: "View", viewVal: "5/5",
+      accessLbl: "Access", accessVal: "4/5 (Transfăgărășan)"
+    },
+    article: {
+      p1: "We were a group of five for this hike. We managed to park our car right next to the entrance, squeezing into a small spot that only fits about three cars. Our adventure started right at the large wooden sign pointing to Valea lui Stan, following the Red Dot marker. At first, the trail felt like a nice, relaxing walk in the park, but it didn't take long before we encountered our first real problem: the path became surprisingly hard to follow.",
+      p2: "Even though it was the second time on this trail for some of us, we struggled to stay on the right track. At one point, we had to take a small detour just to figure out if we were still going the right way, eventually backtracking to the main road. Interestingly, during the entire time we were actively hiking up the mountain, we didn't meet a single other person. It was just us and the gorge.",
+      cap1: "Navigating the steep metal stairs and hanging onto the rock walls.",
+      p3: "The trail got significantly harder once we hit the canyon section. Suddenly, we were climbing steep metal stairs and essentially hanging off the side of the mountain. You definitely need some good physical power and upper body strength to handle this part of the trail safely. It's an exhausting climb, but the stunning, rugged views from inside the gorge make every drop of sweat completely worth it.",
+      p4: "After we finally cleared all the stairs and walked a bit further, the landscape opened up into a beautiful, wide meadow named Poiana Călugărița. The golden view up there was absolutely breathtaking. From the meadow, the mountain part of the trail was mostly over, leading us to the final, and longest, stretch of the journey: a 5.3-kilometer walk on the paved road back to our cars. This road walk took us about an hour to an hour and a half. We passed \"La Cabana By The Lake\" and the Călugărița Bridge, enjoying constant, beautiful views of Lake Vidraru. While the mountain was empty, we shared this road with occasional cars and non-hikers who had just come to see the views from the Vidraru Dam.",
+      cap2: "The long walk back down the road offering clear views of Lake Vidraru.",
+      p5: "After that long walk, we finally arrived back at the cars—but we were greeted by a massive surprise. Just 30 meters from the Valea lui Stan entry sign where we had parked, two little bears were casually hanging around. They were sleeping and looked incredibly funny, acting groggy as if they had just woken up from a 9-hour nap from 11 AM to 8 PM. Luckily, they stayed put at the entrance and didn't come near our cars. Some incredibly nice people driving by saw the bears and stopped to ask if we wanted a ride to get past them safely. There was no need since our cars were right there, so we thanked them and safely headed home, wrapping up an unforgettable day."
+    },
+    footer: { quote: "\"The mountains are calling and I must go.\"" }
+  },
+  ro: {
+    nav: { backText: "Înapoi la Jurnal" },
+    hike: { title: "Valea lui Stan" },
+    stats: {
+      durationLbl: "Durată", durationVal: "5 ore",
+      elevationLbl: "Altitudine", elevationVal: "1.250 m",
+      difficultyLbl: "Dificultate", difficultyVal: "6/10",
+      viewLbl: "Priveliște", viewVal: "5/5",
+      accessLbl: "Acces", accessVal: "4/5 (Transfăgărășan)"
+    },
+    article: {
+      p1: "Am fost un grup de cinci pentru această drumeție. Am reușit să parcăm mașina chiar lângă intrare, înghesuindu-ne într-un spațiu mic unde încap cel mult trei mașini. Aventura noastră a început direct de la indicatorul de lemn cu Valea lui Stan, urmărind marcajul cu punct roșu. La început a părut o simplă plimbare prin parc, dar nu a durat mult până am dat de prima noastră problemă: poteca a devenit destul de greu de urmărit.",
+      p2: "Deși unii dintre noi, inclusiv eu, eram la a doua experiență pe acest traseu, ne-a fost greu să menținem drumul corect. La un moment dat a trebuit să facem un mic ocol pentru a ne da seama dacă mai suntem pe traseu, apoi ne-am întors la poteca principală. Interesant este că, pe tot parcursul drumeției noastre pe munte, nu ne-am întâlnit cu absolut nimeni. Eram doar noi și defileul.",
+      cap1: "Urcând pe scările metalice abrupte, la propriu atârnați de stânci.",
+      p3: "Traseul a devenit considerabil mai greu odată ce am ajuns la partea de canion. Dintr-o dată ne-am trezit urcând pe scări metalice și stând, practic, atârnați de stânci pe marginea muntelui. Ai nevoie cu siguranță de ceva forță fizică și putere în brațe pentru a face acest traseu. Este o urcare solicitantă, dar peisajele superbe din interiorul cheilor fac ca tot efortul să merite din plin.",
+      p4: "După ce am terminat în sfârșit cu urcatul scărilor și am mai mers puțin, peisajul s-a deschis într-o poiană foarte frumoasă numită Poiana Călugărița. O priveliște absolut superbă, aurie. De la poiană mai aveam doar puțin până la finalul părții montane, dar a urmat destul de mult de mers pe șosea ca să ne întoarcem la mașini. Am mers cam o oră, o oră și jumătate (aproximativ 5,3 km), trecând pe lângă „La Cabana By The Lake” și Podul Călugărița. Tot drumul ne-a oferit o priveliște minunată asupra Lacului Vidraru, deși mai treceau uneori mașini. Pe munte nu am dat de nimeni, dar pe șosea am întâlnit câțiva oameni care nu erau drumeți, ci doar turiști veniți să vadă barajul Vidraru.",
+      cap2: "Lungul drum de întoarcere pe șosea, pe marginea Lacului Vidraru.",
+      p5: "După acea lungă plimbare am ajuns, în sfârșit, la mașini, dar ne aștepta o surpriză. La doar vreo 30 de metri de intrarea în traseul Valea lui Stan, pe unde parcasem, se plimbau doi urși mici. Dormeau și arătau foarte amuzant, de parcă tocmai se treziseră dintr-un somn de 9 ore, de la 11 dimineața la 8 seara. Din fericire, au stat liniștiți la intrare și nu s-au apropiat de mașini. Niște oameni foarte de treabă care treceau cu mașina ne-au întrebat dacă vrem să ne ia pentru a trece în siguranță de urși, dar nu a fost nevoie pentru că aveam deja mașinile noastre acolo, așa că le-am mulțumit și am plecat spre casă."
+    },
+    footer: { quote: "„Munții cheamă și trebuie să plec.”" }
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || (navigator.language.toLowerCase().startsWith('ro') ? 'ro' : 'en');
+
+function t(path) {
+  return path.split('.').reduce((o,k) => (o ? o[k] : undefined), i18n[currentLang]);
+}
+
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = t(el.getAttribute('data-i18n'));
+    if (typeof val === 'string') el.textContent = val;
+  });
+  document.getElementById('langVal').textContent = currentLang.toUpperCase();
+  localStorage.setItem('lang', currentLang);
+}
+
+/* Theme toggle */
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('themeVal').textContent = next.toUpperCase();
+});
+
+/* Language toggle */
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'en' ? 'ro' : 'en';
+  applyLanguage();
+});
+
+/* Nav scroll effect */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.pageYOffset > 60);
+});
+
+/* ========== TRAIL MAP (LEAFLET + GPX) ========== */
+function initTrailMap() {
+  const mapElement = document.getElementById('trailMap');
+  if (!mapElement) return;
+
+  const map = L.map('trailMap');
+
+  L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    maxZoom: 17,
+    attribution: '&copy; OpenStreetMap &copy; OpenTopoMap'
+  }).addTo(map);
+
+  // ---------- YOUR GPX FILE ----------
+  const gpxFile = 'valea_lui_stan.gpx'; 
+
+  new L.GPX(gpxFile, {
+    async: true,
+    marker_options: {
+      startIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/pin-icon-start.png',
+      endIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/pin-icon-end.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/pin-shadow.png'
+    },
+    polyline_options: {
+      color: '#0ea5e9', // The exact blue from your screenshot
+      weight: 4,
+      opacity: 0.9,
+      lineCap: 'round',
+      lineJoin: 'round'
+    }
+  }).on('loaded', function(e) {
+    map.fitBounds(e.target.getBounds(), { padding: [40, 40] });
+  }).addTo(map);
+}
+
+// Initialize the map
+initTrailMap();
+
+/* Init */
+document.getElementById('themeVal').textContent = document.documentElement.getAttribute('data-theme').toUpperCase();
+applyLanguage();
+</script>
+
+</body>
+</html>

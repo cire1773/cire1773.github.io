@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zănoaga - Scropoasa | Summit & Solitude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem('theme');
+  if(!t){ t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+:root {
+  --bg: #0a0f0a;
+  --bg-elev: #0f1a0f;
+  --surface: #141f14;
+  --border: #1f2f1f;
+  --text: #e8f0e8;
+  --text-dim: #8a9a8a;
+  --accent: #4ade80;
+  --accent-2: #22c55e;
+  --accent-soft: rgba(74,222,128,0.12);
+  --radius: 16px;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Inter', sans-serif;
+  --display: 'Space Grotesk', sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f0fdf4;
+  --bg-elev: #dcfce7;
+  --surface: #ffffff;
+  --border: #bbf7d0;
+  --text: #14532d;
+  --text-dim: #3f6212;
+  --accent: #16a34a;
+  --accent-2: #15803d;
+  --accent-soft: rgba(22,163,74,0.10);
+}
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background .3s ease, color .3s ease;
+}
+img { display:block; max-width:100%; }
+a { color: inherit; text-decoration:none; }
+button { font: inherit; background:none; border:none; cursor:pointer; color:inherit; }
+
+/* ========== NAV ========== */
+.nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 1.2rem 0;
+  transition: background .3s, backdrop-filter .3s, border-color .3s;
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(10,15,10,0.88);
+  backdrop-filter: blur(14px);
+  border-bottom-color: var(--border);
+}
+[data-theme="light"] .nav.scrolled { background: rgba(240,253,244,0.88); }
+.nav-inner {
+  width: min(1200px, 92%); margin-inline:auto;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo {
+  font-family: var(--display); font-weight:700; font-size:1.15rem;
+  display:flex; align-items:center; gap:.6rem; letter-spacing:-0.02em;
+}
+.nav-logo svg { width:28px; height:28px; color:var(--accent); }
+.nav-right { display:flex; align-items:center; gap:2.2rem; }
+.back-link {
+  font-size:.82rem; text-transform:uppercase; letter-spacing:.12em;
+  color: var(--text-dim); transition: color .2s; font-weight:600;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.back-link:hover { color: var(--accent); }
+.nav-controls { display:flex; align-items:center; gap:.6rem; }
+.directive-toggle {
+  height:34px; padding:0 .65rem; border:1px solid var(--border); border-radius:8px;
+  display:flex; align-items:center; gap:.35rem; font-size:.72rem;
+  color:var(--text-dim); cursor:pointer; transition: all .2s ease; user-select:none;
+  font-family: var(--display); background: transparent;
+}
+.directive-toggle:hover { border-color: var(--accent); background: var(--accent-soft); }
+.directive-toggle .d-kw { color: var(--accent-2); }
+.directive-toggle .d-name { color: var(--text-dim); }
+.directive-toggle .d-val { color: var(--accent); font-weight:700; min-width: 2.2ch; text-align:left; }
+
+/* ========== ARTICLE HERO ========== */
+.article-hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 1.5rem 4rem;
+  background-image: 
+    linear-gradient(to bottom, rgba(10, 15, 10, 0.4) 0%, rgba(10, 15, 10, 0.95) 100%),
+    url('images/lake.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+[data-theme="light"] .article-hero {
+  background-image: 
+    linear-gradient(to bottom, rgba(240, 253, 244, 0.3) 0%, rgba(240, 253, 244, 0.95) 100%),
+    url('images/lake.jpg');
+}
+.article-title {
+  z-index: 2;
+  max-width: 900px;
+}
+.article-title h1 {
+  font-family: var(--serif); font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
+}
+
+/* ========== ARTICLE LAYOUT ========== */
+.container { width: min(1100px, 92%); margin-inline:auto; }
+
+.article-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2.5rem;
+  margin-top: -3rem; 
+  position: relative;
+  z-index: 10;
+  align-items: start;
+}
+
+/* Stats Sidebar */
+.stats-sidebar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+[data-theme="light"] .stats-sidebar { box-shadow: 0 20px 40px rgba(20,83,45,0.08); }
+.stats-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
+.stat-item {
+  display: flex; flex-direction: column; gap: 0.2rem;
+  padding-bottom: 1.2rem; border-bottom: 1px solid var(--border);
+}
+.stat-item:last-child { border-bottom: none; padding-bottom: 0; }
+.stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); }
+.stat-val { font-family: var(--display); font-size: 1.1rem; font-weight: 600; color: var(--accent-2); }
+
+/* Map Box */
+.map-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 100%;
+  min-height: 400px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+[data-theme="light"] .map-container { box-shadow: 0 20px 40px rgba(20,83,45,0.08); }
+.map-container iframe {
+  width: 100%; height: 100%; min-height: 400px; border: none; display: block;
+}
+
+/* Narrative Section */
+.article-body {
+  max-width: 760px;
+  margin: 5rem auto;
+}
+.article-body p {
+  font-size: 1.1rem; line-height: 1.8; color: var(--text);
+  margin-bottom: 2rem;
+}
+.article-body img {
+  border-radius: var(--radius);
+  margin: 3rem 0;
+  border: 1px solid var(--border);
+}
+.article-body .caption {
+  text-align: center; font-size: 0.85rem; color: var(--text-dim);
+  font-style: italic; margin-top: -2rem; margin-bottom: 3rem;
+}
+
+@media (max-width: 850px) {
+  .article-grid { grid-template-columns: 1fr; margin-top: 2rem; }
+  .map-container { min-height: 300px; }
+  .map-container iframe { min-height: 300px; }
+}
+
+/* ========== FOOTER ========== */
+.footer { border-top: 1px solid var(--border); padding: 3rem 0; text-align:center; margin-top: 4rem; }
+.footer p { font-family: var(--serif); font-style:italic; color: var(--text-dim); font-size:1rem; }
+</style>
+
+<!-- LEAFLET MAPS & GPX PLUGIN -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
+<style>
+  .leaflet-top, .leaflet-bottom { z-index: 90 !important; }
+  [data-theme="dark"] .map-container { filter: brightness(0.85) contrast(1.1); }
+</style>
+
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="hiking.html" class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 20l6-10 4 6 2-3 6 7z"/>
+        <circle cx="14" cy="6" r="2"/>
+      </svg>
+    </a>
+    <div class="nav-right">
+      <a href="hiking.html" class="back-link" data-i18n="nav.back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span data-i18n="nav.backText">Back to Journal</span>
+      </a>
+      <div class="nav-controls">
+        <button class="directive-toggle" id="langToggle" type="button" aria-label="Toggle language">
+          <span class="d-name">LANG</span><span class="d-val" id="langVal">EN</span>
+        </button>
+        <button class="directive-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+          <span class="d-name">THEME</span><span class="d-val" id="themeVal">DARK</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="article-hero">
+  <div class="article-title">
+    <h1 data-i18n="hike.title">Camping Zănoaga - Scropoasa - 7 Springs</h1>
+  </div>
+</header>
+
+<!-- STATS & MAP GRID -->
+<div class="container">
+  <div class="article-grid">
+    
+    <aside class="stats-sidebar">
+      <ul class="stats-list">
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.durationLbl">Duration</span>
+          <span class="stat-val" data-i18n="stats.durationVal">6 hours</span>
+        </li>
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.elevationLbl">Elevation</span>
+          <span class="stat-val" data-i18n="stats.elevationVal">1,197 m</span>
+        </li>
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.difficultyLbl">Difficulty</span>
+          <span class="stat-val" data-i18n="stats.difficultyVal">5/10</span>
+        </li>
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.viewLbl">View</span>
+          <span class="stat-val" data-i18n="stats.viewVal">4/5</span>
+        </li>
+        <li class="stat-item">
+          <span class="stat-lbl" data-i18n="stats.accessLbl">Access</span>
+          <span class="stat-val" data-i18n="stats.accessVal">3/5 (Car to Zănoaga)</span>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="map-container" id="trailMap"></div>
+    
+  </div>
+</div>
+
+<!-- NARRATIVE TEXT & PHOTOS -->
+<main class="container">
+  <article class="article-body">
+    <p data-i18n="article.p1"></p>
+    <p data-i18n="article.p2"></p>
+    
+    <img src="images/hiking_photo_1.jpg" alt="Trail path">
+    <p class="caption" data-i18n="article.cap1"></p>
+
+    <p data-i18n="article.p3"></p>
+    
+    <img src="images/waterfall.jpg" alt="Scropoasa Lake">
+    <p class="caption" data-i18n="article.cap2"></p>
+
+    <p data-i18n="article.p4"></p>
+    <p data-i18n="article.p5"></p>
+  </article>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p data-i18n="footer.quote">"The mountains are calling and I must go."</p>
+  </div>
+</footer>
+
+<script>
+const i18n = {
+  en: {
+    nav: { backText: "Back to Journal" },
+    hike: { title: "Camping Zănoaga - Scropoasa - 7 Springs Waterfall" },
+    stats: {
+      durationLbl: "Duration", durationVal: "6 hours",
+      elevationLbl: "Elevation", elevationVal: "1,197 m",
+      difficultyLbl: "Difficulty", difficultyVal: "5/10",
+      viewLbl: "View", viewVal: "4/5",
+      accessLbl: "Access", accessVal: "3/5 (Car to Zănoaga)"
+    },
+    article: {
+      p1: "Our group of five arrived at the trailhead right near Camping Zănoaga, ready for the day's adventure. Right at the entrance, we encountered an old, automated ticket machine displaying a prominent sign: \"Zona frecventată de urși!\" (Bear crossing zone). Thankfully, we didn't meet any bears on our trip! We followed the instructions on the machine, feeding it 10 lei for a ticket, but it swallowed the money and gave us absolutely nothing. After trying a few more times, we noticed some people near the camping area who looked like staff or maintenance workers. We explained the situation, and they kindly told us not to worry about the ticket and just go ahead. We thanked them and officially started our hike.",
+      p2: "We followed the path, eventually crossing a few bridges over the river. The trail was well-marked and featured about five or six educational panels providing interesting information about the local bears, forest fruits, and mushrooms. After hiking for a while, we stumbled upon a beautiful clearing in the woods designed as a rest stop for hikers. Although the main building there was closed and completely deserted, the area was filled with hammocks. We decided to hang around and took a break to eat some snacks and drink water, making absolutely sure not to leave any mess behind before packing up again.",
+      cap1: "A relaxing walk through the woods and over the river bridges.",
+      p3: "Continuing our journey, we reached a fork in the road near the lake, right where Cabana Zănoaga is located. The cabin has been closed for quite some time now, but to our surprise, a lovely couple in their 50s had set up a barbecue out there. They seemed to be the owners of the place and had started cooking food for passing hikers. The incredibly welcoming woman offered us some free \"mici\" (traditional skinless sausages) and bread. We joked that it was a delicious trap to \"lure us in,\" and kindly told her we would definitely come back later for a proper meal, as it was only around 11 AM.",
+      cap2: "The surreal turquoise waters of Scropoasa Lake.",
+      p4: "We stuck to the trail marked with the blue cross until we reached what felt like our turnaround point: Cheile Orzei. Here, the path required crossing the river, but we found ourselves surrounded mostly by water. We might have missed the correct path, or perhaps we were supposed to push further, because we actually walked for about an hour past the main attraction before finally stopping to eat, chat, and relax. Afterward, we retraced our steps back to the trail split where the barbecue was, but before eating, we took a quick 10-minute detour up to Cascada 7 Izvoare (7 Springs Waterfall). We went right up to where the spring starts and snapped some great photos.",
+      p5: "True to our word, we headed back to the couple for lunch. They were wonderful hosts and offered us a lot of extra treats. They gave us an extra portion of mici on the house and even offered us some \"porumb fiert\" (boiled corn), which we had to politely decline as we were completely full. I highly recommend making a stop there; the food was amazing, and the prices were very reasonable. With our energy restored, we took the same road back to the start of our hike at Camping Zănoaga. It was a genuinely great experience, and I would gladly do this trail again."
+    },
+    footer: { quote: "\"The mountains are calling and I must go.\"" }
+  },
+  ro: {
+    nav: { backText: "Înapoi la Jurnal" },
+    hike: { title: "Camping Zănoaga - Lacul Scropoasa - Cascada 7 Izvoare" },
+    stats: {
+      durationLbl: "Durată", durationVal: "6 ore",
+      elevationLbl: "Altitudine", elevationVal: "1.197 m",
+      difficultyLbl: "Dificultate", difficultyVal: "5/10",
+      viewLbl: "Priveliște", viewVal: "4/5",
+      accessLbl: "Acces", accessVal: "3/5 (Auto până la Zănoaga)"
+    },
+    article: {
+      p1: "Grupul nostru de cinci persoane a ajuns la intrarea pe traseu, chiar lângă Camping Zănoaga. Chiar la început, am dat peste un aparat automat de bilete destul de vechi, care avea un panou cu avertismentul: „Zonă frecventată de urși!”. Din fericire, nu am întâlnit niciunul pe drum! Am urmat instrucțiunile, am introdus 10 lei pentru un bilet, dar aparatul ne-a luat banii fără să ne elibereze nimic. După câteva încercări eșuate, am mers la niște oameni din apropiere care păreau a fi din personalul campingului sau niște muncitori. I-am întrebat ce e de făcut, iar ei ne-au spus că este în regulă și ne-au încurajat să intrăm pe traseu fără probleme. Le-am mulțumit și am pornit oficial în aventură.",
+      p2: "Am urmat poteca și am traversat câteva podețe peste râu. Traseul era bine întreținut și avea vreo cinci sau șase panouri informative foarte interesante despre flora și fauna locală, cu detalii despre fructe de pădure, urși și ciuperci. După ceva timp de mers, am găsit un loc superb amenajat în pădure, un fel de popas pentru drumeți. Deși clădirea principală era închisă și nu era nimeni acolo, zona era plină de hamace. Ne-am oprit să ne relaxăm, am mâncat, am băut niște apă și ne-am asigurat, bineînțeles, că nu lăsăm nicio urmă de gunoi în urma noastră înainte de a pleca mai departe.",
+      cap1: "O plimbare relaxantă prin pădure și peste podețele râului.",
+      p3: "Continuându-ne drumul, am ajuns la o intersecție de trasee aproape de lac, exact unde se află Cabana Zănoaga. Cabana este închisă de destul de mult timp, dar, spre surpriza noastră, un cuplu foarte de treabă (trecuți de 50 de ani) făcea un grătar acolo. Cred că erau proprietarii casei și se apucaseră să pregătească mâncare pentru drumeți. Femeia a fost extrem de primitoare și ne-a oferit gratuit o mostră de mici și pâine. Am glumit spunând că încearcă să ne „ademenească”, dar am refuzat politicos pe moment, explicându-le că era abia ora 11 dimineața și promițând că vom veni la masă pe drumul de întoarcere.",
+      cap2: "Turcoazul ireal al apelor Lacului Scropoasa.",
+      p4: "Am continuat să urmărim marcajul cu cruce albastră și am ajuns la ceea ce a fost pentru noi capătul traseului: Cheile Orzei. Acolo a trebuit să traversăm râul și, la un moment dat, ne-am trezit înconjurați doar de apă. E posibil să fi ratat noi poteca potrivită sau pur și simplu trebuia să avansăm mai mult, cert este că am mers cam o oră după ce am depășit atracția principală înainte de a ne opri definitiv pentru a mânca, a povesti și a ne relaxa. Ne-am întors apoi pe același drum până la intersecția cu grătarul, dar înainte de masă am deviat cam 10 minute pe poteca ce urcă la Cascada 7 Izvoare. Am mers fix până unde izvorăște apa și am făcut niște poze grozave.",
+      p5: "Ne-am ținut de cuvânt și ne-am întors la cuplul cu grătarul pentru masa de prânz. Au fost niște gazde extraordinare și ne-au oferit o mulțime de bunătăți în plus. Ne-au dat o porție suplimentară de mici din partea casei și s-au oferit să ne dea chiar și porumb fiert, pe care am fost nevoiți să-l refuzăm pentru că ne săturasem complet. Recomand cu mare drag acea oprire; mâncarea a fost delicioasă, iar prețurile foarte bune. Cu bateriile încărcate, ne-am întors pe același drum pe care venisem, încheind traseul la Camping Zănoaga. A fost o experiență cu adevărat frumoasă și aș repeta acest traseu oricând."
+    },
+    footer: { quote: "„Munții cheamă și trebuie să plec.”" }
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || (navigator.language.toLowerCase().startsWith('ro') ? 'ro' : 'en');
+
+function t(path) {
+  return path.split('.').reduce((o,k) => (o ? o[k] : undefined), i18n[currentLang]);
+}
+
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = t(el.getAttribute('data-i18n'));
+    if (typeof val === 'string') el.textContent = val;
+  });
+  document.getElementById('langVal').textContent = currentLang.toUpperCase();
+  localStorage.setItem('lang', currentLang);
+}
+
+/* Theme toggle */
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('themeVal').textContent = next.toUpperCase();
+});
+
+/* Language toggle */
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'en' ? 'ro' : 'en';
+  applyLanguage();
+});
+
+/* Nav scroll effect */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.pageYOffset > 60);
+});
+
+/* ========== TRAIL MAP (LEAFLET + GPX) ========== */
+function initTrailMap() {
+  const mapElement = document.getElementById('trailMap');
+  if (!mapElement) return;
+
+  const map = L.map('trailMap');
+
+  L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    maxZoom: 17,
+    attribution: '&copy; OpenStreetMap &copy; OpenTopoMap'
+  }).addTo(map);
+
+  // ---------- YOUR GPX FILE ----------
+  const gpxFile = 'camping_zanoaga.gpx'; 
+
+  new L.GPX(gpxFile, {
+    async: true,
+    marker_options: {
+      startIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/pin-icon-start.png',
+      endIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/pin-icon-end.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/pin-shadow.png'
+    },
+    polyline_options: {
+      color: '#0ea5e9',
+      weight: 4,
+      opacity: 0.9,
+      lineCap: 'round',
+      lineJoin: 'round'
+    }
+  }).on('loaded', function(e) {
+    map.fitBounds(e.target.getBounds(), { padding: [40, 40] });
+  }).addTo(map);
+}
+
+// Initialize the map
+initTrailMap();
+
+/* Init */
+document.getElementById('themeVal').textContent = document.documentElement.getAttribute('data-theme').toUpperCase();
+applyLanguage();
+</script>
+
+</body>
+</html>
